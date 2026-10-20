@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TeachMeSomething</title>
+  <meta name="description" content="TeachMeSomething — learn hands-on skills like Rubik's cube, sewing and chess from talented people near you, in small groups.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="community.css">
+  <style>
+    :root { --accent: #1d7a4c; }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --accent: #5fd39a; } }
+    :root[data-theme="dark"] { --accent: #5fd39a; }
+
+    .sessions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    @media (max-width: 760px) { .sessions { grid-template-columns: 1fr; } }
+    .session { display: flex; flex-direction: column; gap: 10px; }
+    .session .emoji { font-size: 32px; line-height: 1; }
+    .session h3 { margin: 0; }
+    .session dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 4px 0 0; font-size: 14px; }
+    .session dt { color: var(--muted); }
+    .session dd { margin: 0; }
+    .seats { display: flex; gap: 4px; margin-top: 4px; }
+    .seats span { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--accent); }
+    .seats span.taken { background: var(--accent); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <a class="logo" href="index.html"><img src="logo-nav.png" alt="Lirico"></a>
+      <a class="back" href="index.html#communities">← All communities</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <p class="badge">A Lirico community · Coming soon</p>
+        <h1 class="serif">Some things are better <em>learned in person</em>.</h1>
+        <p class="lede">TeachMeSomething connects you with people nearby who have a special talent — solving a Rubik's cube, sewing, playing chess — and the patience to share it around a small table.</p>
+        <div class="cta">
+          <a class="btn primary" href="index.html#contact">Join the waitlist</a>
+          <a class="btn" href="index.html#contact">I want to teach</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="wrap">
+        <p class="label">Why small and local</p>
+        <h2 class="serif">AI can explain anything. It can't sit next to you.</h2>
+        <div class="grid">
+          <article class="card"><p class="num serif">01</p><h3 class="serif">Hands-on skills</h3><p>Finger tricks, a needle and thread, a tricky endgame — some things only click when someone shows you.</p></article>
+          <article class="card"><p class="num serif">02</p><h3 class="serif">Small groups</h3><p>Sessions stay small, so everyone gets attention and nobody feels like a face in a lecture hall.</p></article>
+          <article class="card"><p class="num serif">03</p><h3 class="serif">Real neighbors</h3><p>Meet people in your own area who share your curiosity — and maybe come back next week.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="wrap">
+        <p class="label">Preview</p>
+        <h2 class="serif">Sessions near you</h2>
+        <p class="example-note">Example sessions for illustration.</p>
+        <div class="sessions">
+          <article class="card session">
+            <span class="emoji" aria-hidden="true">🧩</span>
+            <span class="tag">Puzzles</span>
+            <h3 class="serif">Solve a Rubik's cube in one afternoon</h3>
+            <dl><dt>Host</dt><dd>Speedcuber, 10+ years</dd><dt>Where</dt><dd>Local library</dd><dt>Group</dt><dd>Up to 4 people</dd></dl>
+            <div class="seats" aria-label="2 of 4 seats taken"><span class="taken"></span><span class="taken"></span><span></span><span></span></div>
+          </article>
+          <article class="card session">
+            <span class="emoji" aria-hidden="true">🧵</span>
+            <span class="tag">Crafts</span>
+            <h3 class="serif">Sew your first tote bag</h3>
+            <dl><dt>Host</dt><dd>Home sewist & tailor</dd><dt>Where</dt><dd>Community center</dd><dt>Group</dt><dd>Up to 5 people</dd></dl>
+            <div class="seats" aria-label="3 of 5 seats taken"><span class="taken"></span><span class="taken"></span><span class="taken"></span><span></span><span></span></div>
+          </article>
+          <article class="card session">
+            <span class="emoji" aria-hidden="true">♟️</span>
+            <span class="tag">Games</span>
+            <h3 class="serif">Chess openings for casual players</h3>
+            <dl><dt>Host</dt><dd>Club player</dd><dt>Where</dt><dd>Neighborhood café</dd><dt>Group</dt><dd>Up to 6 people</dd></dl>
+            <div class="seats" aria-label="1 of 6 seats taken"><span class="taken"></span><span></span><span></span><span></span><span></span><span></span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="wrap">
+        <p class="label">How it works</p>
+        <h2 class="serif">Three steps to the table</h2>
+        <div class="grid">
+          <article class="card"><p class="num serif">01</p><h3 class="serif">Say what you want to learn</h3><p>Anything from knitting to card magic. AI helps match your interests to nearby hosts.</p></article>
+          <article class="card"><p class="num serif">02</p><h3 class="serif">Pick a small session</h3><p>See who's teaching, where, and how many seats are left.</p></article>
+          <article class="card"><p class="num serif">03</p><h3 class="serif">Show up and learn</h3><p>Meet in a public place, learn with your hands, and leave knowing something new.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="block closing">
+      <div class="wrap">
+        <h2 class="serif">Have a talent worth sharing — or a skill you've always wanted?</h2>
+        <div class="cta">
+          <a class="btn primary" href="index.html#contact">Join the waitlist</a>
+          <a class="btn" href="index.html#contact">I want to teach</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>© <span id="y">2026</span> Lirico AI</span>
+      <a href="index.html">lirico-ai.github.io</a>
+    </div>
+  </footer>
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+</html>

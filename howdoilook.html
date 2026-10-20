@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HowDoILook</title>
+  <meta name="description" content="HowDoILook — use AI to see how clothes look on you before you buy.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="community.css">
+  <style>
+    :root { --accent: #8a3ffc; }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --accent: #be95ff; } }
+    :root[data-theme="dark"] { --accent: #be95ff; }
+
+    .studio { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: stretch; }
+    @media (max-width: 760px) { .studio { grid-template-columns: 1fr; } }
+    .mirror { display: grid; place-items: center; background: var(--surface-2); border-radius: 14px; min-height: 360px; padding: 24px; }
+    .mirror svg { width: 100%; max-width: 220px; height: auto; }
+    .mirror .body { fill: color-mix(in srgb, var(--text) 18%, var(--surface-2)); }
+    #outfit { transition: fill .25s ease; }
+    .picker h3 { margin-top: 0; }
+    .swatches { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 20px; }
+    .swatch {
+      width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--border); cursor: pointer; padding: 0;
+    }
+    .swatch[aria-pressed="true"] { outline: 3px solid var(--accent); outline-offset: 2px; }
+    .picker .now { font-size: 15px; color: var(--muted); margin: 0; }
+    .picker .now b { color: var(--text); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <a class="logo" href="index.html"><img src="logo-nav.png" alt="Lirico"></a>
+      <a class="back" href="index.html#communities">← All communities</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <p class="badge">A Lirico community · Coming soon</p>
+        <h1 class="serif">See it on you <em>before you buy it</em>.</h1>
+        <p class="lede">HowDoILook uses AI to show how clothes would look on your own body — so you can shop with confidence, return less, and ask friends for an honest opinion.</p>
+        <div class="cta">
+          <a class="btn primary" href="index.html#contact">Join the waitlist</a>
+          <a class="btn" href="#try">Try the idea</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="try">
+      <div class="wrap">
+        <p class="label">Preview</p>
+        <h2 class="serif">Pick a color, see the change</h2>
+        <p class="example-note">A simple illustration of the idea — the real app will use your own photo.</p>
+        <div class="studio">
+          <div class="mirror" aria-hidden="true">
+            <svg viewBox="0 0 200 320">
+              <circle class="body" cx="100" cy="48" r="30"/>
+              <rect class="body" x="62" y="210" width="32" height="100" rx="14"/>
+              <rect class="body" x="106" y="210" width="32" height="100" rx="14"/>
+              <path id="outfit" fill="#8a3ffc" d="M52 92 Q100 76 148 92 L178 168 L156 178 L144 140 L144 222 L56 222 L56 140 L44 178 L22 168 Z"/>
+            </svg>
+          </div>
+          <div class="card picker">
+            <h3 class="serif">Try a top</h3>
+            <p class="now">Now wearing: <b id="color-name">Violet</b></p>
+            <div class="swatches" role="group" aria-label="Top color">
+              <button class="swatch" style="background:#8a3ffc" data-name="Violet" aria-pressed="true" aria-label="Violet"></button>
+              <button class="swatch" style="background:#1b1b1f" data-name="Black" aria-pressed="false" aria-label="Black"></button>
+              <button class="swatch" style="background:#f4f1ea" data-name="Cream" aria-pressed="false" aria-label="Cream"></button>
+              <button class="swatch" style="background:#2f5bea" data-name="Cobalt" aria-pressed="false" aria-label="Cobalt"></button>
+              <button class="swatch" style="background:#c8442b" data-name="Rust" aria-pressed="false" aria-label="Rust"></button>
+              <button class="swatch" style="background:#4f7a5a" data-name="Sage" aria-pressed="false" aria-label="Sage"></button>
+            </div>
+            <p class="prose" style="font-size:15px; margin:0;">In the full version you'll upload a photo, paste a link to any item from an online store, and see it fitted to your shape, size and lighting.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="wrap">
+        <p class="label">How it works</p>
+        <h2 class="serif">Your mirror, upgraded</h2>
+        <div class="grid">
+          <article class="card"><p class="num serif">01</p><h3 class="serif">Add your photo</h3><p>One full-length photo is enough. You choose what's saved and can delete it anytime.</p></article>
+          <article class="card"><p class="num serif">02</p><h3 class="serif">Pick the clothes</h3><p>Paste a product link or upload a picture of the item you're considering.</p></article>
+          <article class="card"><p class="num serif">03</p><h3 class="serif">See it — and ask around</h3><p>AI renders the outfit on you. Share it with friends and the community for honest second opinions.</p></article>
+        </div>
+        <p class="callout"><strong>Your photos are yours.</strong> We'll only use them to create your previews, never to train models or show others without your permission.</p>
+      </div>
+    </section>
+
+    <section class="block closing">
+      <div class="wrap">
+        <h2 class="serif">Stop guessing in the fitting room.</h2>
+        <a class="btn primary" href="index.html#contact">Join the waitlist</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>© <span id="y">2026</span> Lirico AI</span>
+      <a href="index.html">lirico-ai.github.io</a>
+    </div>
+  </footer>
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+    const outfit = document.getElementById('outfit');
+    const nameEl = document.getElementById('color-name');
+    document.querySelectorAll('.swatch').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.swatch').forEach(b => b.setAttribute('aria-pressed', 'false'));
+        btn.setAttribute('aria-pressed', 'true');
+        outfit.setAttribute('fill', btn.style.backgroundColor);
+        nameEl.textContent = btn.dataset.name;
+      });
+    });
+  </script>
+</body>
+</html>

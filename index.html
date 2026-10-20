@@ -3,60 +3,49 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ProgrammerGo</title>
-  <meta name="description" content="Learn basic prompting skills and connect your expertise and interests to the right AI community.">
+  <title>Lirico AI</title>
+  <meta name="description" content="Humanity built AI. Now AI can help build a better humanity. Lirico AI — standing on the shoulders of giants.">
+  <meta property="og:title" content="Lirico AI — Humanity built AI. Now AI can help build a better humanity.">
+  <meta property="og:description" content="Standing on the shoulders of giants.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #fbfaf7;
       --surface: #ffffff;
-      --surface-2: #f2f0ea;
       --text: #1b1b1f;
       --muted: #5c5c66;
       --border: #e3e0d8;
       --accent: #2f5bea;
       --accent-ink: #ffffff;
       --accent-soft: #e6ecfd;
-      --stone: #1b1b1f;
-      --good: #1d7a4c;
-      --radius: 14px;
-      --shadow: 0 1px 2px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.05);
     }
     @media (prefers-color-scheme: dark) {
       :root:not([data-theme="light"]) {
         --bg: #111214;
         --surface: #1a1b1f;
-        --surface-2: #222328;
         --text: #ededf0;
         --muted: #a1a1ab;
         --border: #2e2f36;
         --accent: #7c9cff;
         --accent-ink: #0e1022;
         --accent-soft: #1f2645;
-        --stone: #ededf0;
-        --good: #5fd39a;
-        --shadow: none;
       }
     }
     :root[data-theme="dark"] {
       --bg: #111214;
       --surface: #1a1b1f;
-      --surface-2: #222328;
       --text: #ededf0;
       --muted: #a1a1ab;
       --border: #2e2f36;
       --accent: #7c9cff;
       --accent-ink: #0e1022;
       --accent-soft: #1f2645;
-      --stone: #ededf0;
-      --good: #5fd39a;
-      --shadow: none;
     }
 
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; scroll-padding-top: 72px; }
     body {
       margin: 0;
       background: var(--bg);
@@ -66,471 +55,227 @@
       -webkit-font-smoothing: antialiased;
     }
     a { color: var(--accent); }
-    code, .mono { font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; }
-    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+    .serif { font-family: Fraunces, Georgia, serif; }
 
-    /* Nav */
-    nav {
+    /* Top bar */
+    header {
       position: sticky; top: 0; z-index: 10;
       background: color-mix(in srgb, var(--bg) 85%, transparent);
       backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--border);
     }
-    nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 16px; }
-    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; color: var(--text); text-decoration: none; letter-spacing: -.01em; }
-    .logo-mark { display: grid; grid-template-columns: repeat(2, 9px); gap: 3px; }
-    .logo-mark span { width: 9px; height: 9px; border-radius: 50%; background: var(--stone); }
-    .logo-mark span:nth-child(2), .logo-mark span:nth-child(3) { background: transparent; border: 2px solid var(--stone); }
-    .nav-links { display: flex; gap: 22px; }
-    .nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; }
-    .nav-links a:hover { color: var(--text); }
-    @media (max-width: 640px) { .nav-links { display: none; } }
+    header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px; flex-wrap: wrap; }
+    .logo { display: inline-flex; align-items: center; }
+    .logo img { height: 34px; width: auto; display: block; }
+    /* Dark logo text would vanish on the dark theme: invert it, keep the star blue */
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .logo img { filter: invert(1) hue-rotate(180deg); }
+    }
+    :root[data-theme="dark"] .logo img { filter: invert(1) hue-rotate(180deg); }
+    nav { display: flex; align-items: center; gap: 22px; }
+    nav a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; white-space: nowrap; }
+    nav a:hover { color: var(--text); }
+    nav a.pill { color: var(--accent-ink); background: var(--accent); padding: 7px 14px; border-radius: 999px; }
+    nav a.pill:hover { color: var(--accent-ink); filter: brightness(1.06); }
+    @media (max-width: 640px) {
+      header .wrap { padding-top: 10px; padding-bottom: 10px; }
+      nav { width: 100%; gap: 16px; overflow-x: auto; padding-bottom: 2px; }
+    }
 
     /* Hero */
-    .hero { position: relative; padding: 88px 0 72px; overflow: hidden; }
-    .hero::before {
-      content: ""; position: absolute; inset: 0;
-      background-image:
-        linear-gradient(var(--border) 1px, transparent 1px),
-        linear-gradient(90deg, var(--border) 1px, transparent 1px);
-      background-size: 44px 44px;
-      mask-image: radial-gradient(ellipse at 70% 30%, #000 0%, transparent 65%);
-      -webkit-mask-image: radial-gradient(ellipse at 70% 30%, #000 0%, transparent 65%);
-      opacity: .7;
+    .hero { padding: 104px 0 112px; text-align: center; }
+    .hero .wrap { max-width: 1200px; }
+    h1 {
+      font-weight: 400;
+      font-size: clamp(34px, 4.2vw, 60px);
+      line-height: 1.12;
+      letter-spacing: -.025em;
+      margin: 0 auto 28px;
+      text-wrap: balance;
     }
-    .hero .wrap { position: relative; }
-    .eyebrow { display: inline-block; font-size: 13px; font-weight: 600; color: var(--accent); background: var(--accent-soft); padding: 4px 12px; border-radius: 999px; margin-bottom: 20px; }
-    h1 { font-size: clamp(36px, 6vw, 60px); line-height: 1.05; letter-spacing: -.03em; margin: 0 0 20px; max-width: 14ch; }
-    h1 em { font-style: normal; color: var(--accent); }
-    .lede { font-size: clamp(17px, 2vw, 20px); color: var(--muted); max-width: 56ch; margin: 0 0 32px; }
-    .cta { display: flex; gap: 12px; flex-wrap: wrap; }
-    .btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 12px 20px; border-radius: 10px; font-weight: 600; font-size: 15px;
-      text-decoration: none; border: 1px solid transparent; cursor: pointer; font-family: inherit;
-    }
-    .btn-primary { background: var(--accent); color: var(--accent-ink); }
-    .btn-primary:hover { filter: brightness(1.08); }
-    .btn-ghost { background: var(--surface); color: var(--text); border-color: var(--border); }
-    .btn-ghost:hover { border-color: var(--muted); }
+    /* One sentence per line on wide screens; balanced wrapping on narrow ones */
+    h1 .line { display: block; }
+    @media (min-width: 900px) { h1 .line { white-space: nowrap; } }
+    h1 em { color: var(--accent); }
+    .sub { font-style: italic; font-size: clamp(20px, 2.4vw, 28px); color: var(--muted); margin: 0 0 32px; }
+    .lede { font-size: clamp(17px, 1.6vw, 19px); color: var(--muted); max-width: 40em; margin: 0 auto; text-wrap: balance; }
 
     /* Sections */
-    section { padding: 72px 0; }
-    section + section { border-top: 1px solid var(--border); }
-    .section-head { margin-bottom: 36px; max-width: 640px; }
-    .kicker { font-family: "JetBrains Mono", monospace; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
-    h2 { font-size: clamp(28px, 4vw, 38px); letter-spacing: -.02em; line-height: 1.15; margin: 0 0 12px; }
-    .section-head p { color: var(--muted); margin: 0; font-size: 17px; }
+    section.block { padding: 88px 0; border-top: 1px solid var(--border); }
+    .label { font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 12px; }
+    h2 { font-weight: 400; font-size: clamp(28px, 4vw, 40px); line-height: 1.15; letter-spacing: -.015em; margin: 0 0 32px; }
+    .prose { max-width: 38em; color: var(--muted); font-size: 17px; margin: 0 0 24px; }
 
-    /* Steps */
-    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    @media (max-width: 800px) { .steps { grid-template-columns: 1fr; } }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); }
-    .step-num { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 15px; margin-bottom: 16px; background: var(--stone); color: var(--bg); }
-    .card h3 { margin: 0 0 8px; font-size: 19px; letter-spacing: -.01em; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 28px 24px; }
+    .card .num { font-size: 14px; color: var(--accent); margin: 0 0 12px; }
+    .card h3 { font-size: 22px; font-weight: 500; line-height: 1.25; margin: 0 0 10px; letter-spacing: -.01em; }
     .card p { margin: 0; color: var(--muted); font-size: 15px; }
+    .grid.two { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 760px) { .grid, .grid.two { grid-template-columns: 1fr; } }
 
-    /* Skills */
-    .skills { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-    @media (max-width: 800px) { .skills { grid-template-columns: 1fr; } }
-    .skill h3 { display: flex; align-items: center; gap: 10px; }
-    .tag { font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 6px; background: var(--surface-2); color: var(--muted); }
-    .compare { display: grid; gap: 8px; margin-top: 16px; }
-    .compare div { font-family: "JetBrains Mono", monospace; font-size: 13px; line-height: 1.5; padding: 10px 12px; border-radius: 8px; background: var(--surface-2); }
-    .compare .label { display: block; font-family: Inter, sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; color: var(--muted); }
-    .compare .after { background: var(--accent-soft); }
-    .compare .after .label { color: var(--accent); }
+    .product { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; text-decoration: none; color: inherit; }
+    .product:hover { border-color: var(--accent); }
+    .product h3 { margin-bottom: 6px; }
+    .product .go, .community .go { color: var(--accent); font-weight: 500; font-size: 15px; white-space: nowrap; }
+    .community { display: flex; flex-direction: column; gap: 8px; text-decoration: none; color: inherit; }
+    .community:hover { border-color: var(--accent); }
+    .community .emoji { font-size: 28px; line-height: 1; }
+    .community h3 { margin: 4px 0 0; }
+    .community p { flex: 1; }
 
-    /* Builder */
-    .builder { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
-    @media (max-width: 860px) { .builder { grid-template-columns: 1fr; } }
-    .field { margin-bottom: 14px; }
-    .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
-    .field label small { font-weight: 400; color: var(--muted); }
-    .field input, .field textarea, .field select {
-      width: 100%; font: inherit; font-size: 15px; color: var(--text);
-      background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px;
+    .btn {
+      display: inline-block; padding: 12px 20px; border-radius: 999px;
+      font-weight: 500; font-size: 15px; text-decoration: none;
+      border: 1px solid var(--border); color: var(--text);
     }
-    .field textarea { resize: vertical; min-height: 64px; }
-    .field input:focus, .field textarea:focus, .field select:focus { outline: 2px solid var(--accent); outline-offset: -1px; border-color: transparent; }
-    .output { position: sticky; top: 80px; }
-    .output pre {
-      margin: 0; white-space: pre-wrap; word-wrap: break-word;
-      font-family: "JetBrains Mono", monospace; font-size: 13.5px; line-height: 1.6;
-      background: var(--surface-2); border-radius: 10px; padding: 16px; min-height: 220px;
-    }
-    .output pre .ph { color: var(--muted); }
-    .output-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 12px; }
-    .score { font-size: 13px; color: var(--muted); }
-    .score b { color: var(--good); }
+    .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+    .btn:hover { filter: brightness(1.06); }
 
-    /* Matcher */
-    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
-    .chip {
-      font: inherit; font-size: 14px; font-weight: 500; cursor: pointer;
-      padding: 8px 14px; border-radius: 999px; border: 1px solid var(--border);
-      background: var(--surface); color: var(--text);
-    }
-    .chip:hover { border-color: var(--muted); }
-    .chip[aria-pressed="true"] { background: var(--stone); color: var(--bg); border-color: var(--stone); }
-    .results { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-    .community h3 { font-size: 17px; margin-bottom: 4px; }
-    .community .where { font-size: 12px; color: var(--muted); margin-bottom: 10px; font-family: "JetBrains Mono", monospace; }
-    .community a.go { display: inline-block; margin-top: 14px; font-size: 14px; font-weight: 600; text-decoration: none; }
-    .community a.go:hover { text-decoration: underline; }
-    .community .why { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
-    .empty { color: var(--muted); padding: 32px; text-align: center; border: 1px dashed var(--border); border-radius: var(--radius); grid-column: 1 / -1; }
-    .note { margin-top: 20px; font-size: 13px; color: var(--muted); }
-
-    footer { border-top: 1px solid var(--border); padding: 32px 0; color: var(--muted); font-size: 14px; }
-    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; align-items: center; }
-    .theme-toggle { background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 8px; padding: 6px 10px; cursor: pointer; font: inherit; font-size: 13px; }
+    footer { border-top: 1px solid var(--border); font-size: 13px; color: var(--muted); }
+    footer .wrap { display: flex; justify-content: space-between; gap: 16px; padding-top: 24px; padding-bottom: 24px; }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
   </style>
 </head>
 <body>
-
-<nav>
-  <div class="wrap">
-    <a class="logo" href="#top" aria-label="ProgrammerGo home">
-      <span class="logo-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-      ProgrammerGo
-    </a>
-    <div class="nav-links">
-      <a href="#how">How it works</a>
-      <a href="#skills">Prompting basics</a>
-      <a href="#builder">Practice</a>
-      <a href="#communities">Find your community</a>
-    </div>
-  </div>
-</nav>
-
-<header class="hero" id="top">
-  <div class="wrap">
-    <span class="eyebrow">Free · No coding required</span>
-    <h1>Learn to prompt. <em>Find your people.</em></h1>
-    <p class="lede">ProgrammerGo teaches the basic prompting skills that make AI genuinely useful, then connects what you already know and love to the AI communities where it matters most.</p>
-    <div class="cta">
-      <a class="btn btn-primary" href="#skills">Start learning →</a>
-      <a class="btn btn-ghost" href="#communities">Find my community</a>
-    </div>
-  </div>
-</header>
-
-<main>
-  <section id="how">
+  <header>
     <div class="wrap">
-      <div class="section-head">
-        <div class="kicker">// how it works</div>
-        <h2>Three moves to get going</h2>
-        <p>You don't need to be a programmer. Your expertise is the valuable part. Prompting is how you put it to work.</p>
-      </div>
-      <div class="steps">
-        <div class="card">
-          <div class="step-num">1</div>
-          <h3>Learn the basics</h3>
-          <p>Five core prompting skills that turn vague answers into useful ones, each with a before-and-after example.</p>
-        </div>
-        <div class="card">
-          <div class="step-num">2</div>
-          <h3>Practice with your expertise</h3>
-          <p>Use the prompt builder to write prompts about your own field: a lesson plan, a lab protocol, a design brief.</p>
-        </div>
-        <div class="card">
-          <div class="step-num">3</div>
-          <h3>Join the right community</h3>
-          <p>Pick your interests and get matched to AI communities where people like you are learning and building.</p>
-        </div>
-      </div>
+      <a class="logo" href="./"><img src="logo-nav.png" alt="Lirico"></a>
+      <nav aria-label="Main">
+        <a href="#about">About</a>
+        <a href="#communities">Communities</a>
+        <a href="#solutions">Solutions</a>
+        <a href="#team">Team</a>
+        <a href="#join">Join us</a>
+        <a class="pill" href="#contact">Contact</a>
+      </nav>
     </div>
-  </section>
+  </header>
 
-  <section id="skills">
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <h1 class="serif"><span class="line">Humanity built AI.</span> <span class="line">Now AI can help build a <em>better&nbsp;humanity</em>.</span></h1>
+        <p class="sub serif">Standing on the shoulders of giants.</p>
+        <p class="lede">Every AI model is built from the words, ideas and work of billions of people. We help you climb onto those shoulders — and see further than you could alone.</p>
+      </div>
+    </section>
+
+    <section class="block" id="about">
+      <div class="wrap">
+        <p class="label">About Lirico</p>
+        <h2 class="serif">Our core values</h2>
+        <div class="grid">
+          <article class="card">
+            <p class="num serif">01</p>
+            <h3 class="serif">AI is a human achievement.</h3>
+            <p>Today's AI learned from generations of human writing, science, art and code. We never forget whose shoulders it stands on.</p>
+          </article>
+          <article class="card">
+            <p class="num serif">02</p>
+            <h3 class="serif">AI should make people bigger, not smaller.</h3>
+            <p>The goal isn't to replace human judgment — it's to sharpen it. Learn faster, think more clearly, create more boldly.</p>
+          </article>
+          <article class="card">
+            <p class="num serif">03</p>
+            <h3 class="serif">The giant grows with us.</h3>
+            <p>People made AI possible; AI helps people grow; better people build better AI. We build tools that keep that cycle turning.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="communities">
+      <div class="wrap">
+        <p class="label">Communities</p>
+        <h2 class="serif">No one stands on the shoulders of giants alone</h2>
+        <p class="prose">Tell us what you care about and what you know, and we'll point you to the AI communities where your expertise is needed — and where you can keep growing.</p>
+        <div class="grid">
+          <a class="card community" href="handyhuman.html">
+            <span class="emoji" aria-hidden="true">🔧</span>
+            <h3 class="serif">HandyHuman</h3>
+            <p>A forum for DIY home repair, electrical, car and remodeling projects — answered by people who've done it.</p>
+            <span class="go">Explore →</span>
+          </a>
+          <a class="card community" href="teachmesomething.html">
+            <span class="emoji" aria-hidden="true">🧩</span>
+            <h3 class="serif">TeachMeSomething</h3>
+            <p>Learn hands-on skills like Rubik's cube, sewing or chess from talented people near you, in small groups.</p>
+            <span class="go">Explore →</span>
+          </a>
+          <a class="card community" href="howdoilook.html">
+            <span class="emoji" aria-hidden="true">👗</span>
+            <h3 class="serif">HowDoILook</h3>
+            <p>See how clothes look on you with AI before you buy — then ask friends for an honest opinion.</p>
+            <span class="go">Explore →</span>
+          </a>
+          <a class="card community" href="roamigo.html">
+            <span class="emoji" aria-hidden="true">🌍</span>
+            <h3 class="serif">Roamigo</h3>
+            <p>Find your people around the world — local living, places worth going, and experiences only locals know.</p>
+            <span class="go">Explore →</span>
+          </a>
+          <a class="card community" href="familygo.html">
+            <span class="emoji" aria-hidden="true">👨‍👩‍👧</span>
+            <h3 class="serif">FamilyGo</h3>
+            <p>It takes a village to raise a child — we help you find yours. Tell us your district and see every option nearby.</p>
+            <span class="go">Explore →</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="solutions">
+      <div class="wrap">
+        <p class="label">Our solutions</p>
+        <h2 class="serif">Tools that help people grow with AI</h2>
+        <a class="card product" href="programmergo.html">
+          <div>
+            <h3 class="serif">ProgrammerGo</h3>
+            <p>Learn basic prompting skills and connect your expertise and interests to the right AI community.</p>
+          </div>
+          <span class="go">Explore →</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="block" id="team">
+      <div class="wrap">
+        <p class="label">Team</p>
+        <h2 class="serif">The people behind Lirico</h2>
+        <!-- TODO: add team members -->
+        <p class="prose">Team profiles are coming soon.</p>
+      </div>
+    </section>
+
+    <section class="block" id="join">
+      <div class="wrap">
+        <p class="label">Join us</p>
+        <h2 class="serif">Help build AI that makes people better</h2>
+        <p class="prose">If you believe AI should lift people up rather than replace them — whether you're an engineer, educator, designer or simply curious — we'd love to hear from you.</p>
+        <a class="btn primary" href="#contact">Get in touch</a>
+      </div>
+    </section>
+
+    <section class="block" id="contact">
+      <div class="wrap">
+        <p class="label">Contact</p>
+        <h2 class="serif">Let's talk</h2>
+        <!-- TODO: add a contact email -->
+        <p class="prose">Questions, ideas or partnerships — reach us on GitHub.</p>
+        <a class="btn" href="https://github.com/lirico-ai">github.com/lirico-ai</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
     <div class="wrap">
-      <div class="section-head">
-        <div class="kicker">// prompting basics</div>
-        <h2>Five skills that cover most of it</h2>
-        <p>Good prompts read like good briefs to a smart colleague who's new to your project.</p>
-      </div>
-      <div class="skills">
-        <div class="card skill">
-          <h3><span class="tag">01</span> Be specific about the task</h3>
-          <p>Say exactly what you want produced, not just the topic.</p>
-          <div class="compare">
-            <div><span class="label">Vague</span>Tell me about photosynthesis.</div>
-            <div class="after"><span class="label">Specific</span>Explain photosynthesis in 5 bullet points for a 7th-grade science class.</div>
-          </div>
-        </div>
-        <div class="card skill">
-          <h3><span class="tag">02</span> Give context</h3>
-          <p>Share who it's for, why you need it, and what you already know.</p>
-          <div class="compare">
-            <div><span class="label">No context</span>Write an email about the delay.</div>
-            <div class="after"><span class="label">With context</span>Write an email to a long-time client explaining our shipment is 2 weeks late due to a supplier issue. Keep the relationship warm.</div>
-          </div>
-        </div>
-        <div class="card skill">
-          <h3><span class="tag">03</span> Show an example</h3>
-          <p>One good example communicates style and format faster than a paragraph of rules.</p>
-          <div class="compare">
-            <div><span class="label">Described</span>Write product names that sound friendly.</div>
-            <div class="after"><span class="label">Shown</span>Suggest 10 names for a budgeting app. I like names in the style of "Mint" or "Copilot": short, warm, one word.</div>
-          </div>
-        </div>
-        <div class="card skill">
-          <h3><span class="tag">04</span> Ask for a format</h3>
-          <p>Tables, checklists, JSON, word limits: tell it the shape of the answer.</p>
-          <div class="compare">
-            <div><span class="label">Any shape</span>Compare these three laptops.</div>
-            <div class="after"><span class="label">Shaped</span>Compare these three laptops in a table with columns for price, weight, battery life, and a one-line verdict.</div>
-          </div>
-        </div>
-        <div class="card skill" style="grid-column: 1 / -1;">
-          <h3><span class="tag">05</span> Iterate like a conversation</h3>
-          <p>The first answer is a draft. Point at what's off and ask for a revision: "shorter", "more formal", "you missed the budget constraint", "give me three alternatives". Ask it to check its own work: "What assumptions did you make? What might be wrong here?"</p>
-        </div>
-      </div>
+      <span>© <span id="y">2026</span> Lirico AI</span>
+      <a href="https://github.com/lirico-ai">GitHub</a>
     </div>
-  </section>
-
-  <section id="builder">
-    <div class="wrap">
-      <div class="section-head">
-        <div class="kicker">// practice</div>
-        <h2>Build a prompt from your expertise</h2>
-        <p>Fill in what you can. The prompt assembles itself on the right. Copy it into any AI assistant.</p>
-      </div>
-      <div class="builder">
-        <div class="card">
-          <div class="field">
-            <label for="f-task">Task <small>What should the AI produce?</small></label>
-            <textarea id="f-task" placeholder="e.g. Draft a one-week lesson plan on fractions"></textarea>
-          </div>
-          <div class="field">
-            <label for="f-context">Context <small>Who's it for? Why? What do you know?</small></label>
-            <textarea id="f-context" placeholder="e.g. 4th graders, mixed reading levels, 45-minute periods"></textarea>
-          </div>
-          <div class="field">
-            <label for="f-example">Example <small>optional</small></label>
-            <input id="f-example" placeholder="e.g. Like a Khan Academy unit overview">
-          </div>
-          <div class="field">
-            <label for="f-format">Format</label>
-            <select id="f-format">
-              <option value="">No preference</option>
-              <option>a bulleted list</option>
-              <option>a table</option>
-              <option>a step-by-step checklist</option>
-              <option>short paragraphs, under 200 words</option>
-              <option>an email draft</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="f-constraints">Constraints <small>optional</small></label>
-            <input id="f-constraints" placeholder="e.g. No paid materials. Plain language.">
-          </div>
-          <label style="display:flex; gap:8px; align-items:center; font-size:14px; cursor:pointer;">
-            <input type="checkbox" id="f-questions" checked> Ask me clarifying questions first if anything is unclear
-          </label>
-        </div>
-        <div class="card output">
-          <div class="output-bar">
-            <span class="score" id="score">Prompt strength: <b>0 / 5</b></span>
-            <button class="btn btn-primary" id="copy" type="button" style="padding:8px 14px; font-size:14px;">Copy</button>
-          </div>
-          <pre id="prompt-out"><span class="ph">Your prompt will appear here as you type…</span></pre>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="communities">
-    <div class="wrap">
-      <div class="section-head">
-        <div class="kicker">// find your community</div>
-        <h2>Connect your interests to the right AI community</h2>
-        <p>Select everything that describes you. We'll show communities where your background is an asset.</p>
-      </div>
-      <div class="chips" id="chips" role="group" aria-label="Your interests"></div>
-      <div class="results" id="results"></div>
-      <p class="note">Communities evolve. Check each one's current rules and join process before diving in. Know a great one we're missing? Suggest it on GitHub.</p>
-    </div>
-  </section>
-</main>
-
-<footer>
-  <div class="wrap">
-    <span>© <span id="year"></span> ProgrammerGo · Learn to prompt. Find your people.</span>
-    <button class="theme-toggle" id="theme" type="button">Toggle theme</button>
-  </div>
-</footer>
-
-<script>
-  // ---------- Prompt builder ----------
-  const $ = id => document.getElementById(id);
-  const fields = ['f-task', 'f-context', 'f-example', 'f-format', 'f-constraints', 'f-questions'];
-
-  function buildPrompt() {
-    const task = $('f-task').value.trim();
-    const context = $('f-context').value.trim();
-    const example = $('f-example').value.trim();
-    const format = $('f-format').value;
-    const constraints = $('f-constraints').value.trim();
-    const ask = $('f-questions').checked;
-
-    const parts = [];
-    if (task) parts.push(task.replace(/[.\s]*$/, '.'));
-    if (context) parts.push('Context: ' + context.replace(/[.\s]*$/, '.'));
-    if (example) parts.push('For reference, here is the kind of thing I mean: ' + example.replace(/[.\s]*$/, '.'));
-    if (format) parts.push('Please format the answer as ' + format + '.');
-    if (constraints) parts.push('Constraints: ' + constraints.replace(/[.\s]*$/, '.'));
-    if (ask && parts.length) parts.push('If anything important is unclear, ask me up to 3 clarifying questions before you start.');
-
-    const out = $('prompt-out');
-    if (!parts.length) {
-      out.innerHTML = '<span class="ph">Your prompt will appear here as you type…</span>';
-    } else {
-      out.textContent = parts.join('\n\n');
-    }
-    const score = [task, context, example, format, constraints].filter(Boolean).length;
-    $('score').innerHTML = 'Prompt strength: <b>' + score + ' / 5</b>';
-  }
-  fields.forEach(id => $(id).addEventListener('input', buildPrompt));
-  $('f-questions').addEventListener('change', buildPrompt);
-
-  $('copy').addEventListener('click', async () => {
-    const text = $('prompt-out').textContent;
-    if ($('prompt-out').querySelector('.ph')) return;
-    try {
-      await navigator.clipboard.writeText(text);
-      $('copy').textContent = 'Copied ✓';
-    } catch {
-      $('copy').textContent = 'Select & copy';
-    }
-    setTimeout(() => { $('copy').textContent = 'Copy'; }, 1600);
-  });
-
-  // ---------- Community matcher ----------
-  const INTERESTS = [
-    'Complete beginner', 'Software & coding', 'Research & ML', 'Open-source models',
-    'Art & design', 'Education', 'Healthcare & medicine', 'Climate & science',
-    'Social impact', 'Data & analytics', 'Prompting craft', 'Building AI products'
-  ];
-
-  const COMMUNITIES = [
-    { name: 'Learn Prompting', where: 'Free course + Discord', url: 'https://learnprompting.org',
-      desc: 'Open, beginner-friendly prompt engineering guide with an active community of learners.',
-      tags: ['Complete beginner', 'Prompting craft'] },
-    { name: 'r/PromptEngineering', where: 'Reddit', url: 'https://www.reddit.com/r/PromptEngineering/',
-      desc: 'Share prompts, techniques, and experiments with other people refining their prompting.',
-      tags: ['Prompting craft', 'Complete beginner'] },
-    { name: 'Hugging Face', where: 'Hub, forums + Discord', url: 'https://huggingface.co/join/discord',
-      desc: 'The home of open models and datasets. Huge, welcoming community across every skill level.',
-      tags: ['Open-source models', 'Research & ML', 'Software & coding', 'Art & design'] },
-    { name: 'r/LocalLLaMA', where: 'Reddit', url: 'https://www.reddit.com/r/LocalLLaMA/',
-      desc: 'Running language models on your own hardware: setups, benchmarks, and new releases.',
-      tags: ['Open-source models', 'Software & coding'] },
-    { name: 'fast.ai forums', where: 'Forum + free course', url: 'https://forums.fast.ai',
-      desc: 'Practical deep learning for coders, with a long-running, supportive learner community.',
-      tags: ['Research & ML', 'Software & coding', 'Complete beginner'] },
-    { name: 'Kaggle', where: 'Competitions, notebooks + forums', url: 'https://www.kaggle.com',
-      desc: 'Learn by doing with real datasets, competitions, and shared notebooks.',
-      tags: ['Data & analytics', 'Research & ML', 'Complete beginner'] },
-    { name: 'EleutherAI', where: 'Discord', url: 'https://www.eleuther.ai',
-      desc: 'Grassroots open research collective working on language models and interpretability.',
-      tags: ['Research & ML', 'Open-source models'] },
-    { name: 'ML Collective', where: 'Open research community', url: 'https://mlcollective.org',
-      desc: 'Nonprofit offering open collaboration and mentorship for independent ML researchers.',
-      tags: ['Research & ML'] },
-    { name: 'MLOps Community', where: 'Slack, meetups + podcast', url: 'https://mlops.community',
-      desc: 'Practitioners shipping ML and AI systems to production. Meetups in many cities.',
-      tags: ['Building AI products', 'Software & coding', 'Data & analytics'] },
-    { name: 'AI Engineer', where: 'Conferences + online', url: 'https://www.ai.engineer',
-      desc: 'Community and events for engineers building products on top of foundation models.',
-      tags: ['Building AI products', 'Software & coding'] },
-    { name: 'r/StableDiffusion', where: 'Reddit', url: 'https://www.reddit.com/r/StableDiffusion/',
-      desc: 'Image generation workflows, model tips, and creative showcases.',
-      tags: ['Art & design', 'Open-source models'] },
-    { name: 'AI for Education', where: 'Resources + community', url: 'https://www.aiforeducation.io',
-      desc: 'Practical AI training, prompt libraries, and guidance for teachers and school leaders.',
-      tags: ['Education', 'Complete beginner', 'Prompting craft'] },
-    { name: 'MedARC', where: 'Discord · open research', url: 'https://www.medarc.ai',
-      desc: 'Open, collaborative research on AI for medicine. Clinicians and researchers welcome.',
-      tags: ['Healthcare & medicine', 'Research & ML'] },
-    { name: 'Climate Change AI', where: 'Community, events + grants', url: 'https://www.climatechange.ai',
-      desc: 'Connects people working at the intersection of climate change and machine learning.',
-      tags: ['Climate & science', 'Social impact', 'Research & ML'] },
-    { name: 'DataKind', where: 'Volunteer projects', url: 'https://www.datakind.org',
-      desc: 'Volunteer your data and AI skills on projects with nonprofits and mission-driven groups.',
-      tags: ['Social impact', 'Data & analytics'] },
-  ];
-
-  const selected = new Set();
-  const chips = $('chips');
-  INTERESTS.forEach(label => {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'chip';
-    b.textContent = label;
-    b.setAttribute('aria-pressed', 'false');
-    b.addEventListener('click', () => {
-      selected.has(label) ? selected.delete(label) : selected.add(label);
-      b.setAttribute('aria-pressed', selected.has(label));
-      renderResults();
-    });
-    chips.appendChild(b);
-  });
-
-  function renderResults() {
-    const results = $('results');
-    results.innerHTML = '';
-    if (!selected.size) {
-      results.innerHTML = '<div class="empty">Pick one or more interests above to see your matches.</div>';
-      return;
-    }
-    const ranked = COMMUNITIES
-      .map(c => ({ c, hits: c.tags.filter(t => selected.has(t)) }))
-      .filter(x => x.hits.length)
-      .sort((a, b) => b.hits.length - a.hits.length);
-
-    ranked.forEach(({ c, hits }) => {
-      const el = document.createElement('article');
-      el.className = 'card community';
-      el.innerHTML = `
-        <h3></h3>
-        <div class="where"></div>
-        <p></p>
-        <div class="why"></div>
-        <a class="go" target="_blank" rel="noopener">Visit →</a>`;
-      el.querySelector('h3').textContent = c.name;
-      el.querySelector('.where').textContent = c.where;
-      el.querySelector('p').textContent = c.desc;
-      el.querySelector('a').href = c.url;
-      const why = el.querySelector('.why');
-      hits.forEach(h => {
-        const t = document.createElement('span');
-        t.className = 'tag';
-        t.textContent = h;
-        why.appendChild(t);
-      });
-      results.appendChild(el);
-    });
-  }
-  renderResults();
-
-  // ---------- Misc ----------
-  $('year').textContent = new Date().getFullYear();
-  $('theme').addEventListener('click', () => {
-    const root = document.documentElement;
-    const isDark = root.dataset.theme
-      ? root.dataset.theme === 'dark'
-      : matchMedia('(prefers-color-scheme: dark)').matches;
-    root.dataset.theme = isDark ? 'light' : 'dark';
-    try { localStorage.setItem('pg-theme', root.dataset.theme); } catch {}
-  });
-  try {
-    const saved = localStorage.getItem('pg-theme');
-    if (saved) document.documentElement.dataset.theme = saved;
-  } catch {}
-</script>
+  </footer>
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 </body>
 </html>

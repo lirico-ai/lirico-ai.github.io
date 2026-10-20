@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FamilyGo</title>
+  <meta name="description" content="FamilyGo — it takes a village to raise a child. We help you find yours. Tell us your district and we'll show you every option nearby.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="community.css">
+  <style>
+    :root { --accent: #c2416b; }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --accent: #ff8fb1; } }
+    :root[data-theme="dark"] { --accent: #ff8fb1; }
+
+    /* FamilyGo logo is full color: no dark-mode invert; sit it on a light chip instead */
+    .logo img { height: 56px; filter: none !important; }
+    header .wrap { min-height: 76px; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .logo img { background: #fbfaf7; border-radius: 10px; padding: 4px 8px; }
+    }
+    :root[data-theme="dark"] .logo img { background: #fbfaf7; border-radius: 10px; padding: 4px 8px; }
+
+    .hero .wrap { max-width: 1100px; }
+    .hero h1 { font-size: clamp(34px, 4.6vw, 62px); text-wrap: balance; }
+    @media (min-width: 900px) { .hero h1 { white-space: nowrap; } }
+
+    /* Original illustration: a village of families */
+    .village { display: block; width: 100%; max-width: 820px; height: auto; margin: 8px auto 36px; border-radius: 20px; }
+    .village .hill-back { fill: color-mix(in srgb, var(--accent) 10%, var(--bg)); }
+    .village .hill-front { fill: color-mix(in srgb, var(--accent) 18%, var(--bg)); }
+    .village .sun { fill: color-mix(in srgb, #f2b44b 55%, var(--bg)); }
+    .village .wall { fill: var(--surface); stroke: var(--border); stroke-width: 2; }
+    .village .roof { fill: var(--accent); }
+    .village .window { fill: color-mix(in srgb, #f2b44b 70%, var(--bg)); }
+    .village .trunk { fill: color-mix(in srgb, var(--text) 35%, var(--bg)); }
+    .village .leaf { fill: color-mix(in srgb, #4f9a6a 55%, var(--bg)); }
+    .village .skin { fill: #e9b98f; }
+    .village .hand { stroke: #e9b98f; stroke-width: 5; stroke-linecap: round; fill: none; }
+    .village .cloud { fill: var(--surface); opacity: .85; }
+
+    /* Village animations */
+    @media (prefers-reduced-motion: no-preference) {
+      .village .person { animation: hop 2.8s ease-in-out infinite; animation-delay: calc(var(--i) * .18s); }
+      .village .person.kid { animation-name: hop-kid; }
+      .village .tree { transform-box: fill-box; transform-origin: 50% 100%; animation: sway 4s ease-in-out infinite alternate; animation-delay: var(--delay); }
+      .village .sun { transform-box: fill-box; transform-origin: center; animation: glow 5s ease-in-out infinite alternate; }
+      .village .cloud { animation: drift var(--dur) linear infinite; animation-delay: var(--delay); }
+      .village .window { animation: twinkle 3.6s ease-in-out infinite; animation-delay: var(--delay); }
+    }
+    @keyframes hop     { 0%, 30%, 100% { transform: translateY(0); } 15% { transform: translateY(-6px); } }
+    @keyframes hop-kid { 0%, 30%, 100% { transform: translateY(0); } 15% { transform: translateY(-10px); } }
+    @keyframes sway    { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
+    @keyframes glow    { from { transform: scale(1); } to { transform: scale(1.08); } }
+    @keyframes drift   { from { transform: translateX(880px); } to { transform: translateX(-60px); } }
+    @keyframes twinkle { 0%, 100% { opacity: 1; } 50% { opacity: .55; } }
+    .sub { font-style: italic; font-size: clamp(22px, 2.8vw, 30px); margin: 0 0 28px; }
+    .sub em { color: var(--accent); }
+    /* Lede breaks at the dash on wide screens, balanced wrapping on narrow ones */
+    .hero .lede { max-width: none; }
+    .hero .lede .line { display: block; }
+    @media (min-width: 1000px) { .hero .lede .line { white-space: nowrap; } }
+    @media (max-width: 999px) { .hero .lede { max-width: 36em; } .hero .lede .line { display: inline; } }
+
+    /* District finder */
+    #district { max-width: 1040px; margin: 40px auto 0; }
+    .ask { font-style: italic; font-size: 19px; color: var(--muted); margin: 0 0 14px; }
+    .finder { padding: 28px; text-align: left; }
+    .finder form { text-align: center; margin: 0 0 8px; }
+    /* "I live in ___ with my ___ year-old kid." */
+    .sentence {
+      display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; gap: 4px 8px;
+      font-family: Fraunces, Georgia, serif; font-size: clamp(18px, 2vw, 22px); line-height: 1.7; margin: 4px 0 20px;
+    }
+    .sentence label { cursor: pointer; }
+    .phrase { display: inline-flex; align-items: baseline; gap: 8px; white-space: nowrap; }
+    .combo { position: relative; display: inline-block; max-width: 100%; }
+    .finder input, .age-pick select {
+      font: inherit; color: var(--accent); background: transparent; border: 0; border-bottom: 2px solid var(--accent);
+      border-radius: 0; outline: none; padding: 0 6px; field-sizing: content; /* grow with the text where supported */
+    }
+    .finder input { min-width: 6ch; max-width: 100%; width: 9ch; text-align: center; }
+    @supports (field-sizing: content) { .finder input { width: auto; } }
+    .finder input::placeholder { color: color-mix(in srgb, var(--accent) 45%, var(--bg)); font-style: italic; }
+    .finder input:focus, .age-pick select:focus { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+    .age-pick { position: relative; display: inline-flex; }
+    .age-pick select { appearance: none; -webkit-appearance: none; cursor: pointer; padding-right: 20px; }
+    .age-pick select option { color: var(--text); background: var(--surface); font-family: Inter, system-ui, sans-serif; font-size: 15px; }
+    .age-pick::after { content: "▾"; position: absolute; right: 6px; top: 50%; transform: translateY(-50%); pointer-events: none; font-size: 13px; color: var(--accent); }
+    .finder .hint { font-size: 13px; color: var(--muted); margin: 0; }
+    .chips-label { font-size: 14px; font-weight: 600; margin: 20px 0 10px; text-align: center; }
+    .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 0 0 16px; }
+    .chip {
+      font: inherit; font-size: 14px; color: var(--text); cursor: pointer;
+      background: var(--bg); border: 1px solid var(--border); border-radius: 999px; padding: 7px 14px;
+    }
+    .chip:hover { border-color: var(--accent); }
+    .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+
+    /* City suggestions */
+    .suggest {
+      position: absolute; z-index: 5; top: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+      width: min(340px, 86vw); text-align: left; line-height: 1.3; font-family: Inter, system-ui, sans-serif; font-size: 15px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.08); overflow: hidden;
+    }
+    .suggest ul { list-style: none; margin: 0; padding: 6px; max-height: 300px; overflow-y: auto; }
+    .suggest li { padding: 9px 12px; border-radius: 10px; cursor: pointer; line-height: 1.3; }
+    .suggest li b { display: block; font-weight: 600; font-size: 15px; }
+    .suggest li span { font-size: 13px; color: var(--muted); }
+    .suggest li[aria-selected="true"], .suggest li:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+    .suggest .empty { color: var(--muted); font-size: 14px; cursor: default; }
+    .suggest .empty:hover { background: none; }
+    .suggest .credit { display: block; margin: 0; padding: 6px 14px 8px; font-size: 11px; color: var(--muted); border-top: 1px solid var(--border); }
+    .suggest .credit a { color: inherit; }
+    .results { margin-top: 24px; display: none; }
+    .results.on { display: block; }
+    .results h3 { margin: 0 0 16px; font-size: 22px; font-weight: 500; }
+    .results h3 b { color: var(--accent); font-weight: 500; }
+    .options { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; }
+
+    /* Category rows that scroll sideways */
+    .rail-row h4 { margin: 0 0 10px; font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+    .rail-row h4 em { font-style: normal; }
+    .rail-row h4 .anim { display: inline-flex; }
+    .anim svg { width: 64px; height: 48px; overflow: visible; }
+    .anim .chalk { font: 700 9px/1 "Comic Sans MS", "Chalkboard", cursive; fill: #fff; }
+    .anim .zz { font: 700 8px/1 Inter, sans-serif; fill: var(--muted); }
+    @media (prefers-reduced-motion: no-preference) {
+      .anim .chalk { animation: chalk 4s infinite; }
+      .anim .c2 { animation-delay: .8s; } .anim .c3 { animation-delay: 1.6s; }
+      .anim .ball { animation: bounce 1s cubic-bezier(.5,0,.5,1) infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+      .anim .shadow { animation: shadow 1s cubic-bezier(.5,0,.5,1) infinite; transform-box: fill-box; transform-origin: center; }
+      .anim .note { animation: notes 2.4s ease-out infinite; } .anim .n2 { animation-delay: 1.2s; }
+      .anim .food { animation: wiggle 1.8s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+      .anim .carrot { animation-delay: .3s; } .anim .dino { animation-delay: .6s; }
+      .anim .steam { animation: steam 2.4s ease-out infinite; } .anim .s2 { animation-delay: .8s; } .anim .s3 { animation-delay: 1.6s; }
+      .anim .swing { animation: swing 2s ease-in-out infinite alternate; transform-origin: 24px 3px; }
+      .anim .heart { animation: beat 1.2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+      .anim .ecg { stroke-dasharray: 70; animation: ecg 1.2s linear infinite; }
+      .anim .cradle { animation: rock 2.4s ease-in-out infinite alternate; transform-origin: 24px 30px; }
+      .anim .zz { animation: zz 2.4s ease-out infinite; } .anim .z2 { animation-delay: 1.2s; }
+      .anim .kid { animation: hop 1.2s ease-in-out infinite; } .anim .k2 { animation-delay: .6s; }
+      .anim .balloon { animation: float 3s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 50% 100%; }
+      .anim .popper { animation: pop 2.2s ease-in-out infinite; transform-origin: 6px 32px; }
+      .anim .pc { animation: burst 2.2s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+      .anim .p2, .anim .p5 { animation-delay: .05s; } .anim .p3, .anim .p6 { animation-delay: .1s; }
+      .anim .bag { animation: sway 1.6s ease-in-out infinite alternate; transform-origin: 20px 6px; }
+      .anim .teddy { animation: peek 2.4s ease-in-out infinite; }
+      .anim .block { animation: hop 1.6s ease-in-out infinite; animation-delay: .4s; }
+      .anim .spark { animation: sparkle 1.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+    }
+    @keyframes chalk   { 0%, 8% { opacity: 0; } 18%, 80% { opacity: 1; } 92%, 100% { opacity: 0; } }
+    @keyframes bounce  { 0%, 100% { transform: translateY(14px) scale(1.12, .88); } 50% { transform: translateY(0) scale(1); } }
+    @keyframes shadow  { 0%, 100% { transform: scaleX(1); opacity: .9; } 50% { transform: scaleX(.55); opacity: .4; } }
+    @keyframes notes   { 0% { transform: translateY(4px); opacity: 0; } 25% { opacity: 1; } 100% { transform: translate(3px, -8px) rotate(10deg); opacity: 0; } }
+    @keyframes wiggle  { 0%, 100% { transform: translateY(0) rotate(0); } 25% { transform: translateY(-2px) rotate(-6deg); } 50% { transform: translateY(0) rotate(0); } 75% { transform: translateY(-1px) rotate(5deg); } }
+    @keyframes steam   { 0% { transform: translateY(4px); opacity: 0; } 30% { opacity: 1; } 100% { transform: translateY(-6px); opacity: 0; } }
+    @keyframes swing   { from { transform: rotate(-28deg); } to { transform: rotate(28deg); } }
+    @keyframes beat    { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.12); } 30% { transform: scale(.97); } 45% { transform: scale(1.08); } }
+    @keyframes ecg     { from { stroke-dashoffset: 70; } to { stroke-dashoffset: -70; } }
+    @keyframes rock    { from { transform: rotate(-9deg); } to { transform: rotate(9deg); } }
+    @keyframes zz      { 0% { transform: translate(0, 4px); opacity: 0; } 30% { opacity: 1; } 100% { transform: translate(3px, -4px); opacity: 0; } }
+    @keyframes float   { from { transform: translateY(2px) rotate(-6deg); } to { transform: translateY(-3px) rotate(6deg); } }
+    @keyframes sway    { from { transform: rotate(-8deg); } to { transform: rotate(8deg); } }
+    @keyframes pop     { 0%, 55%, 100% { transform: rotate(0); } 62% { transform: rotate(-10deg) scale(1.05); } 72% { transform: rotate(3deg); } }
+    @keyframes burst   { 0%, 58% { opacity: 0; transform: translate(-4px, 4px) scale(.3); } 66% { opacity: 1; transform: translate(0, 0) scale(1.1); } 90% { opacity: 1; transform: translate(1px, -1px) scale(1); } 100% { opacity: 0; } }
+    @keyframes peek    { 0%, 100% { transform: translateY(2px); } 35%, 70% { transform: translateY(-1px); } }
+    @keyframes sparkle { 0%, 100% { transform: scale(.4); opacity: .3; } 50% { transform: scale(1.1); opacity: 1; } }
+    .rail-row h4 small { font-size: 12px; font-weight: 600; color: var(--muted); background: var(--bg); border: 1px solid var(--border); border-radius: 999px; padding: 0 8px; }
+    .rail {
+      display: grid; grid-auto-flow: column; grid-auto-columns: 260px; gap: 14px;
+      overflow-x: auto; scroll-snap-type: x mandatory; padding: 2px 2px 14px; margin: 0 -2px;
+      scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--muted) 35%, transparent) transparent;
+    }
+    .rail::-webkit-scrollbar { height: 8px; }
+    .rail::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--muted) 35%, transparent); border-radius: 999px; }
+    .tile {
+      position: relative; display: block; height: 180px; border-radius: 16px; overflow: hidden; scroll-snap-align: start;
+      color: #fff; text-decoration: none; box-shadow: 0 4px 14px rgba(0,0,0,.10);
+    }
+    .tile .cover { position: absolute; inset: 0; background: center / cover no-repeat; transition: transform .35s ease; }
+    a.tile:hover .cover { transform: scale(1.05); }
+    a.tile:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+    .tile::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.72) 0%, rgba(0,0,0,.25) 45%, rgba(0,0,0,0) 70%); }
+    .tile .cap { position: absolute; z-index: 1; left: 14px; right: 14px; bottom: 12px; line-height: 1.25; }
+    .tile .cap b { display: block; font-size: 16px; font-weight: 600; text-shadow: 0 1px 2px rgba(0,0,0,.4); }
+    .tile .cap span { display: block; font-size: 12px; opacity: .9; margin-top: 3px; }
+    .tile .credit {
+      position: absolute; z-index: 1; top: 8px; right: 8px; max-width: calc(100% - 16px);
+      font-size: 9px; line-height: 1.3; padding: 2px 6px; border-radius: 6px; background: rgba(0,0,0,.45); color: rgba(255,255,255,.9);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    /* Drawn covers for places without a free photo */
+    .cover.art { display: grid; place-items: center; font-size: 64px; padding-bottom: 40px; }
+    .cover.art-education { background: linear-gradient(135deg, #5b8def, #8fb4ff); }
+    .cover.art-activities { background: linear-gradient(135deg, #f08a4b, #ffc27a); }
+    .cover.art-restaurants { background: linear-gradient(135deg, #e0565b, #ff9a8b); }
+    .cover.art-parks { background: linear-gradient(135deg, #3f9b6a, #8fd19e); }
+    .cover.art-healthcare { background: linear-gradient(135deg, #2a9d9f, #7fd6cf); }
+    .cover.art-childcare { background: linear-gradient(135deg, #e6a93a, #ffd97a); }
+    .cover.art-playdates { background: linear-gradient(135deg, #8a6fd1, #c3b1ff); }
+    .cover.art-events { background: linear-gradient(135deg, #d14f8a, #ff9cc6); }
+    .cover.art-shopping { background: linear-gradient(135deg, #4b5fc2, #9aa8f5); }
+
+    .where { margin: 28px 0 8px; padding: 22px; text-align: center; border: 1px dashed color-mix(in srgb, var(--accent) 45%, var(--border)); border-radius: 16px; background: color-mix(in srgb, var(--accent) 5%, transparent); }
+    .where-q { display: block; font-size: 20px; margin: 0 0 12px; }
+    .where-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .where .combo { flex: 0 1 340px; }
+    .where input {
+      width: 100%; field-sizing: fixed; font: inherit; font-size: 16px; color: var(--text); text-align: left;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 11px 18px; border-bottom: 1px solid var(--border);
+    }
+    .where input:focus { outline: 2px solid var(--accent); outline-offset: 1px; background: var(--surface); }
+    .photo-credits { margin-top: 12px; font-size: 12px; color: var(--muted); }
+    .photo-credits summary { cursor: pointer; }
+    .photo-credits p { margin: 8px 0 4px; }
+    .photo-credits ul { margin: 0; padding-left: 18px; }
+    .photo-credits a { color: inherit; }
+    .option { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; }
+    .option .emoji { font-size: 22px; line-height: 1.2; }
+    .option b { display: block; font-size: 15px; }
+    .option span.d { font-size: 13px; color: var(--muted); }
+    a.place { text-decoration: none; color: inherit; }
+    a.place:hover { border-color: var(--accent); }
+    .place .meta { display: block; font-size: 12px; font-weight: 600; color: var(--accent); margin: 2px 0 4px; }
+    .place .d { display: block; line-height: 1.45; }
+    .empty-note { grid-column: 1 / -1; color: var(--muted); font-size: 14px; margin: 0; }
+    .results .note { font-size: 13px; color: var(--muted); margin: 16px 0 0; }
+
+    .offers .emoji { font-size: 28px; line-height: 1; display: block; margin-bottom: 10px; }
+    .offers h3 small { display: block; font-family: Inter, system-ui, sans-serif; font-size: 13px; font-weight: 600; color: var(--accent); letter-spacing: .02em; margin-top: 4px; }
+
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 760px) { .split { grid-template-columns: 1fr; } }
+    .split .card p + p { margin-top: 12px; }
+    .statement { font-family: Fraunces, Georgia, serif; font-size: 22px; line-height: 1.3; color: var(--text) !important; margin-bottom: 12px !important; }
+
+    .promise { font-size: clamp(26px, 3.6vw, 38px); line-height: 1.3; max-width: 24ch; margin: 0 auto 32px; }
+    .promise span { display: block; }
+    .promise em { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <a class="logo" href="familygo.html"><img src="familygo-logo-nav.png" alt="FamilyGo"></a>
+      <a class="back" href="#about">About FamilyGo</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <h1 class="serif">It takes a village to <em>raise a child</em>.</h1>
+        <p class="sub serif">We help you <em>find yours</em>.</p>
+        <svg class="village" viewBox="0 0 820 300" role="img" aria-label="Illustration of families holding hands in front of a small village">
+          <circle class="sun" cx="690" cy="70" r="38"/>
+          <!-- Clouds drift across the sky -->
+          <g class="cloud" style="--dur: 48s; --delay: -10s">
+            <ellipse cx="0" cy="62" rx="34" ry="12"/><ellipse cx="18" cy="52" rx="20" ry="14"/><ellipse cx="-14" cy="56" rx="16" ry="10"/>
+          </g>
+          <g class="cloud" style="--dur: 64s; --delay: -38s">
+            <ellipse cx="0" cy="100" rx="28" ry="10"/><ellipse cx="12" cy="92" rx="16" ry="11"/>
+          </g>
+          <path class="hill-back" d="M0 210 C140 120 300 130 420 175 C540 220 680 120 820 150 L820 300 L0 300 Z"/>
+          <!-- Houses -->
+          <g>
+            <rect class="wall" x="96" y="150" width="56" height="44" rx="3"/>
+            <path class="roof" d="M88 152 L124 122 L160 152 Z"/>
+            <rect class="window" style="--delay: 0s" x="116" y="164" width="16" height="14" rx="2"/>
+          </g>
+          <g>
+            <rect class="wall" x="250" y="132" width="64" height="50" rx="3"/>
+            <path class="roof" d="M241 134 L282 100 L323 134 Z"/>
+            <rect class="window" style="--delay: 1.3s" x="262" y="146" width="14" height="14" rx="2"/>
+            <rect class="window" style="--delay: 2.1s" x="288" y="146" width="14" height="14" rx="2"/>
+          </g>
+          <g>
+            <rect class="wall" x="540" y="150" width="58" height="46" rx="3"/>
+            <path class="roof" d="M531 152 L569 120 L607 152 Z"/>
+            <rect class="window" style="--delay: .7s" x="561" y="164" width="16" height="14" rx="2"/>
+          </g>
+          <g>
+            <rect class="wall" x="690" y="140" width="52" height="42" rx="3"/>
+            <path class="roof" d="M682 142 L716 114 L750 142 Z"/>
+            <rect class="window" style="--delay: 2.8s" x="708" y="152" width="16" height="13" rx="2"/>
+          </g>
+          <!-- Trees sway from the base of the trunk -->
+          <g class="tree" style="--delay: 0s"><rect class="trunk" x="196" y="160" width="6" height="30" rx="2"/><circle class="leaf" cx="199" cy="150" r="20"/></g>
+          <g class="tree" style="--delay: -1.2s"><rect class="trunk" x="470" y="166" width="6" height="28" rx="2"/><circle class="leaf" cx="473" cy="156" r="18"/></g>
+          <g class="tree" style="--delay: -2.1s"><rect class="trunk" x="640" y="160" width="6" height="30" rx="2"/><circle class="leaf" cx="643" cy="150" r="16"/></g>
+          <path class="hill-front" d="M0 250 C200 205 420 215 560 235 C680 252 760 230 820 222 L820 300 L0 300 Z"/>
+          <!-- Families holding hands: a wave passes along the row.
+               Hand lines run deep into each body so they stay attached while people hop. -->
+          <g>
+            <path class="hand" d="M230 232 L280 252 M280 252 L330 232 M338 232 L388 252 M388 252 L438 232 M446 232 L498 230 M506 230 L556 252"/>
+            <g class="person" style="--i: 0"><circle class="skin" cx="226" cy="186" r="14"/><rect x="208" y="203" width="36" height="58" rx="16" fill="#5a8fd1"/></g>
+            <g class="person kid" style="--i: 1"><circle class="skin" cx="280" cy="222" r="11"/><rect x="267" y="236" width="26" height="34" rx="12" fill="#f2b44b"/></g>
+            <g class="person" style="--i: 2"><circle class="skin" cx="334" cy="186" r="14"/><rect x="316" y="203" width="36" height="58" rx="16" fill="var(--accent)"/></g>
+            <g class="person kid" style="--i: 3"><circle class="skin" cx="388" cy="222" r="11"/><rect x="375" y="236" width="26" height="34" rx="12" fill="#6bb38a"/></g>
+            <g class="person" style="--i: 4"><circle class="skin" cx="442" cy="186" r="14"/><rect x="424" y="203" width="36" height="58" rx="16" fill="#8a6fd1"/></g>
+            <g class="person" style="--i: 5"><circle class="skin" cx="502" cy="184" r="14"/><rect x="484" y="201" width="36" height="60" rx="16" fill="#e07a5f"/></g>
+            <g class="person kid" style="--i: 6"><circle class="skin" cx="556" cy="222" r="11"/><rect x="543" y="236" width="26" height="34" rx="12" fill="#5a8fd1"/></g>
+          </g>
+        </svg>
+        <p class="lede"><span class="line">FamilyGo connects parents with the families, playdates, events and resources nearby —</span> <span class="line">so no one has to figure out parenting alone.</span></p>
+        <div id="district">
+          <p class="ask serif">Help us find the right village for you and your family.</p>
+        <div class="card finder">
+          <form id="finder-form">
+            <div class="sentence">
+              <label for="district-input">I live in</label>
+              <span class="combo">
+                <input id="district-input" type="text" placeholder="your city" autocomplete="off" required
+                       role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="city-list">
+                <span class="suggest" id="suggest" hidden>
+                  <ul id="city-list" role="listbox" aria-label="Matching places"></ul>
+                  <span class="credit">Places © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors</span>
+                </span>
+              </span>
+              <span class="phrase">
+              <label for="kid-age">with my</label>
+              <span class="age-pick" id="age-field">
+                <select id="kid-age">
+                  <option value="">X</option>
+                  <option value="0">under 1</option>
+                  <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
+                  <option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option>
+                  <option>13</option><option>14</option><option>15</option><option>16</option><option>17</option>
+                </select>
+              </span>
+              <span>year-old kid.</span>
+              </span>
+            </div>
+            <button class="btn primary" type="submit">Show me where my family can go!</button>
+          </form>
+          <p class="chips-label">What are you looking for?</p>
+          <div class="chips" id="chips" role="group" aria-label="What are you looking for?">
+            <button type="button" class="chip" data-tag="education" aria-pressed="false">🏫 Education</button>
+            <button type="button" class="chip" data-tag="activities" aria-pressed="false">🎨 Activities</button>
+            <button type="button" class="chip" data-tag="restaurants" aria-pressed="false">🍽️ Restaurants</button>
+            <button type="button" class="chip" data-tag="parks" aria-pressed="false">🛝 Parks &amp; playgrounds</button>
+            <button type="button" class="chip" data-tag="healthcare" aria-pressed="false">🩺 Healthcare</button>
+            <button type="button" class="chip" data-tag="childcare" aria-pressed="false">👶 Childcare</button>
+            <button type="button" class="chip" data-tag="playdates" aria-pressed="false">🧸 Playdates</button>
+            <button type="button" class="chip" data-tag="events" aria-pressed="false">🎈 Family events</button>
+            <button type="button" class="chip" data-tag="shopping" aria-pressed="false">🛍️ Shopping</button>
+          </div>
+          <div class="results" id="results" aria-live="polite">
+            <h3 class="serif">Your village in <b id="district-name"></b><span id="age-note"></span></h3>
+            <div class="options" id="options"></div>
+            <form class="where" id="where-form">
+              <label class="where-q serif" for="where-input" id="where-q">Not in Boston? Tell us where you live.</label>
+              <div class="where-row">
+                <span class="combo">
+                  <input id="where-input" type="text" placeholder="your city or town" autocomplete="off" required
+                         role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="where-list">
+                  <span class="suggest" id="where-suggest" hidden>
+                    <ul id="where-list" role="listbox" aria-label="Matching places"></ul>
+                    <span class="credit">Places © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors</span>
+                  </span>
+                </span>
+                <button class="btn primary" type="submit">Find my village</button>
+              </div>
+            </form>
+            <p class="note" id="results-note"></p>
+            <details class="photo-credits" id="photo-credits" hidden>
+              <summary>Photo credits</summary>
+              <p>Cover photos are freely licensed images from Wikimedia Commons, shown with their authors and licenses.</p>
+              <ul></ul>
+            </details>
+          </div>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="offers">
+      <div class="wrap">
+        <p class="label">What FamilyGo offers</p>
+        <h2 class="serif">Everything a village gives you — in one place</h2>
+        <div class="grid offers">
+          <article class="card"><span class="emoji" aria-hidden="true">💬</span><h3 class="serif">ParentTalk<small>Share &amp; Learn</small></h3><p>Exchange parenting advice, educational resources, school recommendations, and everyday experiences.</p></article>
+          <article class="card"><span class="emoji" aria-hidden="true">🧸</span><h3 class="serif">Playdates<small>Find Little Friends</small></h3><p>Connect with nearby families, organize playdates, and help children build friendships.</p></article>
+          <article class="card"><span class="emoji" aria-hidden="true">🏡</span><h3 class="serif">Local Families<small>Find Your Village</small></h3><p>Discover parents in your district who share similar interests, experiences, and parenting journeys.</p></article>
+          <article class="card"><span class="emoji" aria-hidden="true">🛍️</span><h3 class="serif">FamilyGo Market<small>Share &amp; Exchange</small></h3><p>Buy, sell, donate, or exchange children's clothing, toys, books, and other essentials.</p></article>
+          <article class="card"><span class="emoji" aria-hidden="true">🎈</span><h3 class="serif">Family Events<small>Grow Together</small></h3><p>Discover family-friendly activities, parenting workshops, and community gatherings.</p></article>
+          <article class="card"><span class="emoji" aria-hidden="true">✨</span><h3 class="serif">Ask FamilyGo<small>AI-Powered Community Knowledge</small></h3><p>Use AI to discover relevant community discussions, find helpful resources, and learn from the collective experiences of other parents.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="about">
+      <div class="wrap">
+        <p class="label">About FamilyGo</p>
+        <h2 class="serif">Why we're building the village</h2>
+        <div class="split">
+          <article class="card">
+            <p class="label">Our vision</p>
+            <p class="statement">To build the world's most welcoming parenting community.</p>
+            <p>We believe raising a child should never be a journey taken alone. By connecting families and sharing collective wisdom, we make parenting easier, more rewarding, and more connected.</p>
+          </article>
+          <article class="card">
+            <p class="label">Our mission</p>
+            <p class="statement">Connecting parents. Empowering families. Building communities.</p>
+            <p>FamilyGo combines human connection with AI-powered knowledge sharing to help parents navigate the challenges and joys of raising children.</p>
+            <p>Starting with Chinese-speaking families in North America, we aim to grow into a global community that welcomes parents and caregivers from every background.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="block closing">
+      <div class="wrap">
+        <p class="label">Our promise</p>
+        <h2 class="serif promise">
+          <span>No parent should feel alone.</span>
+          <span>No experience should go to waste.</span>
+          <span><em>Every family belongs.</em></span>
+        </h2>
+        <a class="btn primary" href="#district">Find my village</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>© <span id="y">2026</span> Lirico AI</span>
+      <a href="index.html#communities">← All communities</a>
+    </div>
+  </footer>
+  <script src="data/boston.js"></script>
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+    const OPTIONS = [
+      { tag: 'education',   emoji: '🏫', title: 'Schools & preschools',     desc: 'Recommendations from local parents' },
+      { tag: 'education',   emoji: '📚', title: 'Tutoring & classes',       desc: 'Language, music, STEM and more' },
+      { tag: 'activities',  emoji: '🎨', title: "Kids' classes",            desc: 'Art, swimming, sports and dance' },
+      { tag: 'activities',  emoji: '🏕️', title: 'Weekend activities',       desc: 'Things to do together this weekend' },
+      { tag: 'restaurants', emoji: '🍽️', title: 'Kid-friendly restaurants', desc: "High chairs, kids' menus, room for strollers" },
+      { tag: 'restaurants', emoji: '🧁', title: 'Family cafés',             desc: 'Play corners and parent-friendly spots' },
+      { tag: 'parks',       emoji: '🛝', title: 'Playgrounds',              desc: 'Rated by local parents' },
+      { tag: 'parks',       emoji: '🌳', title: 'Parks & trails',           desc: 'Stroller-friendly walks nearby' },
+      { tag: 'healthcare',  emoji: '🩺', title: 'Pediatricians',            desc: 'Doctors other parents trust' },
+      { tag: 'healthcare',  emoji: '🦷', title: 'Dentists & specialists',   desc: 'Kid-friendly care, reviewed by parents' },
+      { tag: 'childcare',   emoji: '👶', title: 'Daycare',                  desc: 'Trusted childcare centers nearby' },
+      { tag: 'childcare',   emoji: '🧑‍🍼', title: 'Babysitters & nannies', desc: 'Recommended by families you know' },
+      { tag: 'playdates',   emoji: '🧸', title: 'Playdates',                desc: 'Meetups at parks and libraries' },
+      { tag: 'playdates',   emoji: '🏡', title: 'Local families',           desc: 'Parents nearby with kids the same age' },
+      { tag: 'events',      emoji: '🎈', title: 'Family events',            desc: 'Festivals, workshops and gatherings' },
+      { tag: 'events',      emoji: '📖', title: 'Story times',              desc: 'Libraries and bookstores near you' },
+      { tag: 'shopping',    emoji: '🛍️', title: 'FamilyGo Market',          desc: 'Clothes, toys and gear from neighbors' },
+      { tag: 'shopping',    emoji: '🧺', title: "Kids' stores",             desc: 'Local shops parents recommend' },
+    ];
+    const chips = [...document.querySelectorAll('.chip')];
+    const optionsEl = document.getElementById('options');
+    const resultsEl = document.getElementById('results');
+
+    const TAG_EMOJI = { education: '🏫', activities: '🎨', restaurants: '🍽️', parks: '🛝', healthcare: '🩺',
+                        childcare: '👶', playdates: '🧸', events: '🎈', shopping: '🛍️' };
+    const noteEl = document.getElementById('results-note');
+
+    // Real listings exist for Boston, MA (data/boston.js); other places get the generic preview.
+    function isBoston(place) {
+      const [city, ...rest] = place.toLowerCase().split(',').map(t => t.trim());
+      const region = rest.join(' ');
+      return /^(east |south )?boston$/.test(city) && (!region || /massachusetts|\bma\b/.test(region));
+    }
+
+    const ANIM = {
+      education: `<svg viewBox="0 0 48 36"><rect x="3" y="3" width="42" height="26" rx="3" fill="#2f4f3f" stroke="#b07a46" stroke-width="2.5"/>
+        <text class="chalk c1" x="9" y="16">1+2</text><text class="chalk c2" x="27" y="16">=3</text>
+        <text class="chalk c3" x="13" y="25">★ ★</text><rect x="20" y="30" width="8" height="4" rx="1" fill="#b07a46"/></svg>`,
+      activities: `<svg viewBox="0 0 48 36"><ellipse class="shadow" cx="16" cy="33" rx="7" ry="2" fill="#0002"/>
+        <g class="ball"><circle cx="16" cy="11" r="6.5" fill="#f08a4b"/><path d="M9.5 11h13M16 4.5v13" stroke="#fff" stroke-width="1.5"/></g>
+        <g class="note n1" fill="#8a6fd1"><ellipse cx="33" cy="26" rx="3" ry="2.3"/><path d="M35.6 26V14" stroke="#8a6fd1" stroke-width="1.6"/><path d="M35.6 14q4 1 3.5 5" stroke="#8a6fd1" stroke-width="1.6" fill="none"/></g>
+        <g class="note n2" fill="#5b8def"><ellipse cx="41" cy="20" rx="2.6" ry="2"/><ellipse cx="47" cy="18" rx="2.6" ry="2"/><path d="M43.3 20V10l6-2v10" stroke="#5b8def" stroke-width="1.5" fill="none"/></g></svg>`,
+      restaurants: `<svg viewBox="0 0 48 36"><path class="steam s1" d="M15 13c-3-3 3-5 0-9" stroke="#aaa" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+        <path class="steam s2" d="M24 12c-3-3 3-5 0-9" stroke="#aaa" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+        <path class="steam s3" d="M33 13c-3-3 3-5 0-9" stroke="#aaa" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+        <ellipse cx="24" cy="27" rx="22" ry="7" fill="#fff" stroke="#e3e0d8" stroke-width="1.5"/><ellipse cx="24" cy="27" rx="15" ry="4.2" fill="none" stroke="#f0ede6"/>
+        <g class="food broc"><rect x="9.5" y="22" width="3" height="6" rx="1" fill="#6a9a3a"/><circle cx="9" cy="21" r="3" fill="#3f9b4a"/><circle cx="13" cy="20.5" r="3.2" fill="#4caf50"/><circle cx="11" cy="18.5" r="2.8" fill="#3f9b4a"/></g>
+        <g class="food carrot"><path d="M16 29l9-6 1.5 2.5z" fill="#f08a2b"/><path d="M25 23l2-2.5M25.5 23.8l3-1" stroke="#4caf50" stroke-width="1.4" stroke-linecap="round"/></g>
+        <g class="food dino"><path d="M29 28c0-3 2-5 5-5 1 0 1.5-1 2.5-2.5 1-1.5 3-1.5 3.5 0 .4 1.2-.6 2-1.5 2.5 1.5 1 2 2.5 2 4 0 .8.8 1 1.6.6-.2 1.2-1.4 1.6-2.4 1.4l-.3 1.5h-1.6l-.2-1.2h-4.4l-.2 1.2h-1.6l-.3-1.6c-1.2.1-2-.3-2-1z" fill="#d9a050" stroke="#b07a32" stroke-width=".8"/><circle cx="38.6" cy="21.6" r=".6" fill="#5a3a1a"/></g></svg>`,
+      parks: `<svg viewBox="0 0 48 36"><path d="M6 34L10 3M42 34L38 3M8 3h32" stroke="#8a6a4a" stroke-width="3" stroke-linecap="round"/>
+        <g class="swing"><path d="M19 4v20M29 4v20" stroke="#777" stroke-width="1.5"/><rect x="17" y="23" width="14" height="3" rx="1.5" fill="#3f9b6a"/>
+        <circle cx="24" cy="15" r="3.5" fill="#e9b98f"/><rect x="21" y="18" width="6" height="6" rx="2.5" fill="#f2b44b"/></g></svg>`,
+      healthcare: `<svg viewBox="0 0 48 36"><path class="heart" d="M24 31S8 21 8 12a7 7 0 0 1 16-3 7 7 0 0 1 16 3c0 9-16 19-16 19z" fill="#e0565b"/>
+        <polyline class="ecg" points="2,18 14,18 18,10 22,26 26,14 29,18 46,18" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>`,
+      childcare: `<svg viewBox="0 0 48 36"><g class="cradle">
+        <path d="M5 17h38a19 15 0 0 1-38 0z" fill="#e6a93a"/><path d="M5 17h38" stroke="#c98d22" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="15" cy="14" r="6" fill="#f3c9a0"/><path d="M13 8.5q2-2.5 4 0" stroke="#7a4a2a" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+        <path d="M11.6 14.2q1.3 1.2 2.6 0M15.8 14.2q1.3 1.2 2.6 0" stroke="#5a3a1a" stroke-width="1" fill="none" stroke-linecap="round"/>
+        <circle cx="12.2" cy="16.4" r="1.1" fill="#f29b9b" opacity=".8"/><circle cx="17.8" cy="16.4" r="1.1" fill="#f29b9b" opacity=".8"/>
+        <path d="M19 13.5c4-2 13-2 21 0v4H19z" fill="#9bc4f0"/><path d="M22 15.5h3M28 15.5h3M34 15.5h3" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/></g>
+        <text class="zz z1" x="24" y="8">z</text><text class="zz z2" x="30" y="4">z</text></svg>`,
+      playdates: `<svg viewBox="0 0 48 36"><path d="M17 24L31 24" stroke="#e9b98f" stroke-width="2.5" stroke-linecap="round"/>
+        <g class="kid k1"><circle cx="14" cy="11" r="4.5" fill="#e9b98f"/><rect x="9" y="16" width="10" height="14" rx="5" fill="#8a6fd1"/></g>
+        <g class="kid k2"><circle cx="34" cy="11" r="4.5" fill="#e9b98f"/><rect x="29" y="16" width="10" height="14" rx="5" fill="#6bb38a"/></g></svg>`,
+      events: `<svg viewBox="0 0 48 36">
+        <g class="popper"><path d="M4 34L10 16L22 28Z" fill="#f2b44b"/><path d="M6.5 27l7.5 5M8.5 21.5l10 8" stroke="#e0565b" stroke-width="2"/>
+          <ellipse cx="16" cy="22" rx="8.5" ry="2.6" transform="rotate(45 16 22)" fill="#d98f1f"/></g>
+        <g class="burst"><path class="pc p1" d="M18 18l-2-7" stroke="#5b8def" stroke-width="2" stroke-linecap="round"/>
+          <path class="pc p2" d="M21 20q3-6 8-6" stroke="#d14f8a" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path class="pc p3" d="M22 23l7 1" stroke="#6bb38a" stroke-width="2" stroke-linecap="round"/>
+          <circle class="pc p4" cx="14" cy="9" r="1.6" fill="#f2b44b"/><rect class="pc p5" x="25" y="9" width="3" height="3" rx=".6" fill="#8a6fd1" transform="rotate(20 26.5 10.5)"/>
+          <circle class="pc p6" cx="30" cy="20" r="1.5" fill="#e0565b"/></g>
+        <g class="balloon"><path d="M40 22q-2 6 1 13" stroke="#999" fill="none"/><ellipse cx="40" cy="12" rx="6.5" ry="8.5" fill="#d14f8a"/>
+          <path d="M38.5 20.5h3l-1.5 2z" fill="#d14f8a"/><ellipse cx="37.8" cy="8.5" rx="1.6" ry="2.6" fill="#fff6"/></g></svg>`,
+      shopping: `<svg viewBox="0 0 48 36"><g class="bag">
+        <path d="M12 14v-2a8 6 0 0 1 16 0v2" stroke="#4b5fc2" stroke-width="2.5" fill="none"/>
+        <g class="teddy"><circle cx="15" cy="3" r="2.6" fill="#a8743f"/><circle cx="25" cy="3" r="2.6" fill="#a8743f"/>
+          <circle cx="20" cy="7" r="6" fill="#c08a52"/><ellipse cx="20" cy="9" rx="2.6" ry="2" fill="#e8c9a0"/>
+          <circle cx="17.8" cy="6" r=".9" fill="#3a2414"/><circle cx="22.2" cy="6" r=".9" fill="#3a2414"/><circle cx="20" cy="8.4" r=".8" fill="#3a2414"/></g>
+        <rect x="8" y="14" width="24" height="20" rx="3" fill="#4b5fc2"/><path d="M16 22a4 4 0 0 0 8 0" stroke="#fff" stroke-width="2" fill="none"/></g>
+        <g class="block"><rect x="35" y="24" width="10" height="10" rx="1.5" fill="#e0565b"/><text x="40" y="32" text-anchor="middle" font-size="8" font-weight="700" fill="#fff" font-family="Inter, sans-serif">A</text></g>
+        <path class="spark" d="M41 6l1.5 3.5L46 11l-3.5 1.5L41 16l-1.5-3.5L36 11l3.5-1.5z" fill="#f2b44b"/></svg>`,
+    };
+    const TAG_LABEL = Object.fromEntries(chips.map(c => [c.dataset.tag, c.textContent.trim().replace(/^\S+\s/, '')]));
+    const creditsEl = document.getElementById('photo-credits');
+
+    // One card: a photo cover when we have a freely licensed photo, otherwise a drawn cover for its category.
+    function tile({ tag, title, sub, img, credit, url }) {
+      const el = document.createElement(url ? 'a' : 'div');
+      el.className = 'tile';
+      if (url) { el.href = url; el.target = '_blank'; el.rel = 'noopener'; }
+      el.innerHTML = '<div class="cover"></div><div class="cap"><b></b><span></span></div>';
+      const cover = el.querySelector('.cover');
+      if (img) {
+        cover.style.backgroundImage = `url("${img}")`;
+        const c = document.createElement('small');
+        c.className = 'credit';
+        c.textContent = credit;
+        el.append(c);
+      } else {
+        cover.classList.add('art', `art-${tag}`);
+        cover.textContent = TAG_EMOJI[tag];
+      }
+      el.querySelector('b').textContent = title;
+      el.querySelector('.cap span').textContent = sub;
+      return el;
+    }
+
+    // Group cards by category into horizontally scrolling rows.
+    function rows(items) {
+      const groups = new Map();
+      items.forEach(it => groups.has(it.tag) ? groups.get(it.tag).push(it) : groups.set(it.tag, [it]));
+      return [...groups].map(([tag, list]) => {
+        const row = document.createElement('section');
+        row.className = 'rail-row';
+        row.innerHTML = '<h4><span class="anim" aria-hidden="true"></span> <em></em> <small></small></h4><div class="rail"></div>';
+        row.querySelector('h4 span').innerHTML = ANIM[tag] || TAG_EMOJI[tag];
+        row.querySelector('h4 em').textContent = TAG_LABEL[tag];
+        row.querySelector('h4 small').textContent = list.length;
+        row.querySelector('.rail').append(...list.map(tile));
+        return row;
+      });
+    }
+
+    const agesLabel = p => p.ageMin === 0 && p.ageMax === 17 ? 'All ages' : p.ageMin === p.ageMax ? `Age ${p.ageMin}` : `Ages ${p.ageMin}–${p.ageMax}`;
+
+    function renderOptions() {
+      const picked = chips.filter(c => c.getAttribute('aria-pressed') === 'true').map(c => c.dataset.tag);
+      const place = document.getElementById('district-input').value.trim();
+      creditsEl.hidden = true;
+      if (isBoston(place) && window.FAMILYGO_PLACES?.boston) {
+        const age = ageSel.value === '' ? null : Number(ageSel.value);
+        const list = window.FAMILYGO_PLACES.boston
+          .filter(p => !picked.length || picked.includes(p.tag))
+          .filter(p => age === null || (p.ageMin <= age && age <= p.ageMax));
+        optionsEl.replaceChildren(...rows(list.map(p => ({
+          tag: p.tag, title: p.name, sub: `${p.neighborhood} · ${agesLabel(p)}`, img: p.img, credit: p.credit, url: p.url
+        }))));
+        if (!list.length) optionsEl.innerHTML = '<p class="empty-note">Nothing here yet for that combination — try another category or age.</p>';
+        noteEl.textContent = 'Compiled from public sources in October 2026. Please check each website for current details.';
+        const photos = list.filter(p => p.img);
+        if (photos.length) {
+          const ul = creditsEl.querySelector('ul');
+          ul.replaceChildren(...photos.map(p => {
+            const li = document.createElement('li');
+            li.innerHTML = '<span></span> — <a target="_blank" rel="noopener">source</a>';
+            li.querySelector('span').textContent = `${p.name}: ${p.credit}`;
+            li.querySelector('a').href = p.source;
+            return li;
+          }));
+          creditsEl.hidden = false;
+        }
+        return;
+      }
+      noteEl.innerHTML = 'FamilyGo is coming soon. <a href="index.html#contact">Join the waitlist</a> to be first when your district opens.';
+      const list = picked.length ? OPTIONS.filter(o => picked.includes(o.tag)) : OPTIONS;
+      optionsEl.replaceChildren(...rows(list.map(o => ({ tag: o.tag, title: o.title, sub: o.desc }))));
+    }
+
+    chips.forEach(chip => chip.addEventListener('click', () => {
+      chip.setAttribute('aria-pressed', chip.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+      renderOptions();
+    }));
+
+    // Kid's age
+    const ageSel = document.getElementById('kid-age');
+    function renderAge() {
+      const v = ageSel.value;
+      document.getElementById('age-field').classList.toggle('on', v !== '');
+      document.getElementById('age-note').textContent =
+        v === '' ? '' : v === '0' ? ' for your baby' : ` for your ${v}-year-old`;
+    }
+    ageSel.addEventListener('change', () => { renderAge(); if (resultsEl.classList.contains('on')) renderOptions(); });
+
+    // City autocomplete (US, Canada, Mexico) via Photon / OpenStreetMap
+    const PLACE_TYPES = new Set(['city', 'town', 'village', 'suburb', 'quarter', 'neighbourhood', 'borough', 'municipality']);
+    const COUNTRIES = { US: 'USA', CA: 'Canada', MX: 'Mexico' };
+
+    function attachAutocomplete(input, suggest, listEl, idPrefix) {
+      let items = [], active = -1, timer, controller;
+
+      function openList(open) {
+        suggest.hidden = !open;
+        input.setAttribute('aria-expanded', String(open));
+      }
+      function setActive(i) {
+        active = i;
+        [...listEl.children].forEach((li, j) => li.setAttribute('aria-selected', String(j === i)));
+        if (i >= 0) { input.setAttribute('aria-activedescendant', `${idPrefix}-${i}`); listEl.children[i].scrollIntoView({ block: 'nearest' }); }
+        else input.removeAttribute('aria-activedescendant');
+      }
+      function choose(i) {
+        input.value = items[i].value;
+        openList(false);
+      }
+      function renderList() {
+        listEl.replaceChildren();
+        if (!items.length) {
+          const li = document.createElement('li');
+          li.className = 'empty';
+          li.textContent = 'No matching places in North America';
+          listEl.append(li);
+        }
+        items.forEach((it, i) => {
+          const li = document.createElement('li');
+          li.id = `${idPrefix}-${i}`;
+          li.setAttribute('role', 'option');
+          li.innerHTML = '<b></b><span></span>';
+          li.querySelector('b').textContent = it.name;
+          li.querySelector('span').textContent = it.detail;
+          li.addEventListener('mousedown', e => { e.preventDefault(); choose(i); });
+          listEl.append(li);
+        });
+        setActive(-1);
+        openList(true);
+      }
+      async function search(q) {
+        controller?.abort();
+        controller = new AbortController();
+        const url = 'https://photon.komoot.io/api/?' + new URLSearchParams({
+          q, limit: '20', lang: 'en', osm_tag: 'place', bbox: '-170,14,-50,84'
+        });
+        try {
+          const res = await fetch(url, { signal: controller.signal });
+          const data = await res.json();
+          const seen = new Set();
+          items = data.features.map(f => f.properties)
+            .filter(p => COUNTRIES[p.countrycode] && PLACE_TYPES.has(p.osm_value))
+            .map(p => {
+              const parts = [p.city !== p.name ? p.city : null, p.state, COUNTRIES[p.countrycode]].filter(Boolean);
+              return { name: p.name, detail: parts.join(', '), value: [p.name, p.state].filter(Boolean).join(', ') };
+            })
+            .filter(it => !seen.has(it.name + it.detail) && seen.add(it.name + it.detail))
+            .slice(0, 8);
+          renderList();
+        } catch (err) {
+          if (err.name !== 'AbortError') openList(false); // offline or service down: plain text input still works
+        }
+      }
+      input.addEventListener('input', () => {
+        clearTimeout(timer);
+        const q = input.value.trim();
+        if (q.length < 2) { controller?.abort(); openList(false); return; }
+        timer = setTimeout(() => search(q), 250);
+      });
+      input.addEventListener('keydown', e => {
+        if (suggest.hidden || !items.length) return;
+        if (e.key === 'ArrowDown') { e.preventDefault(); setActive((active + 1) % items.length); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); setActive((active - 1 + items.length) % items.length); }
+        else if (e.key === 'Enter' && active >= 0) { e.preventDefault(); choose(active); }
+        else if (e.key === 'Escape') openList(false);
+      });
+      input.addEventListener('blur', () => openList(false));
+      return { close: () => openList(false) };
+    }
+
+    const input = document.getElementById('district-input');
+    const mainAC = attachAutocomplete(input, document.getElementById('suggest'), document.getElementById('city-list'), 'city');
+    const whereInput = document.getElementById('where-input');
+    const whereAC = attachAutocomplete(whereInput, document.getElementById('where-suggest'), document.getElementById('where-list'), 'where');
+
+    document.getElementById('finder-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const value = document.getElementById('district-input').value.trim();
+      if (!value) return;
+      document.getElementById('district-name').textContent = value;
+      document.getElementById('where-q').textContent = isBoston(value)
+        ? 'Not in Boston? Tell us where you live.'
+        : 'Looking somewhere else? Tell us where you live.';
+      mainAC.close();
+      renderAge();
+      renderOptions();
+      resultsEl.classList.add('on');
+    });
+
+    // The second box under the results searches again from the top
+    document.getElementById('where-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const value = whereInput.value.trim();
+      if (!value) return;
+      whereAC.close();
+      input.value = value;
+      whereInput.value = '';
+      document.getElementById('finder-form').requestSubmit();
+      document.getElementById('district').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // Start with Boston and a 3-year-old so real listings are visible right away
+    input.value = 'Boston, Massachusetts';
+    ageSel.value = '3';
+    document.getElementById('finder-form').requestSubmit();
+  </script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HandyHuman</title>
+  <meta name="description" content="HandyHuman — a community for DIY home repair, electrical, car and remodeling questions, answered by people who've done it.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="community.css">
+  <style>
+    :root { --accent: #d9580d; }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --accent: #ff9a52; } }
+    :root[data-theme="dark"] { --accent: #ff9a52; }
+
+    .forum { display: grid; grid-template-columns: 200px 1fr; gap: 20px; align-items: start; }
+    @media (max-width: 760px) { .forum { grid-template-columns: 1fr; } }
+    .boards { list-style: none; margin: 0; padding: 8px; }
+    .boards li { padding: 8px 12px; border-radius: 8px; font-size: 14px; color: var(--muted); }
+    .boards li.on { background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent); font-weight: 600; }
+    .posts { display: grid; gap: 12px; }
+    .post { display: grid; grid-template-columns: 44px 1fr; gap: 14px; padding: 16px 18px; }
+    .votes { text-align: center; font-weight: 600; font-size: 14px; color: var(--muted); line-height: 1.2; }
+    .votes::before { content: "▲"; display: block; color: var(--accent); font-size: 12px; }
+    .post h3 { font-family: Inter, system-ui, sans-serif; font-size: 16px; font-weight: 600; margin: 6px 0 4px; }
+    .post .meta { font-size: 13px; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <a class="logo" href="index.html"><img src="logo-nav.png" alt="Lirico"></a>
+      <a class="back" href="index.html#communities">← All communities</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <p class="badge">A Lirico community · Coming soon</p>
+        <h1 class="serif">Fix it yourself. <em>Not by yourself.</em></h1>
+        <p class="lede">HandyHuman is a forum for the projects you start in a hardware-store aisle — leaky faucets, dead outlets, squeaky brakes, half-finished bathrooms. Ask the people who've already done it.</p>
+        <div class="cta">
+          <a class="btn primary" href="index.html#contact">Join the waitlist</a>
+          <a class="btn" href="#preview">See how it works</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="wrap">
+        <p class="label">What we cover</p>
+        <h2 class="serif">Four boards, one goal: a finished project</h2>
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+          <article class="card"><h3 class="serif">Household repair</h3><p>Plumbing, drywall, doors, appliances — the everyday breakages.</p></article>
+          <article class="card"><h3 class="serif">Electrical</h3><p>Outlets, switches, fixtures, and knowing when to call a pro.</p></article>
+          <article class="card"><h3 class="serif">Car</h3><p>Maintenance, diagnostics and repairs you can do in your driveway.</p></article>
+          <article class="card"><h3 class="serif">Remodeling</h3><p>Tile, flooring, cabinets, paint — the bigger weekend projects.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="preview">
+      <div class="wrap">
+        <p class="label">Preview</p>
+        <h2 class="serif">Real questions, answered by people with dirty hands</h2>
+        <p class="example-note">Example posts for illustration.</p>
+        <div class="forum">
+          <ul class="card boards">
+            <li class="on">All boards</li>
+            <li>Household repair</li>
+            <li>Electrical</li>
+            <li>Car</li>
+            <li>Remodeling</li>
+          </ul>
+          <div class="posts">
+            <article class="card post">
+              <div class="votes">142</div>
+              <div>
+                <span class="tag">Household repair</span>
+                <h3>Kitchen faucet drips even after replacing the cartridge — what am I missing?</h3>
+                <p class="meta">38 answers · Shopping list attached</p>
+              </div>
+            </article>
+            <article class="card post">
+              <div class="votes">97</div>
+              <div>
+                <span class="tag">Electrical</span>
+                <h3>Swapping a regular outlet for a GFCI in the bathroom — which wire goes to LINE?</h3>
+                <p class="meta">21 answers · Verified by a licensed electrician</p>
+              </div>
+            </article>
+            <article class="card post">
+              <div class="votes">64</div>
+              <div>
+                <span class="tag">Car</span>
+                <h3>First time changing front brake pads — photo walkthrough</h3>
+                <p class="meta">15 answers · Step-by-step guide</p>
+              </div>
+            </article>
+            <article class="card post">
+              <div class="votes">51</div>
+              <div>
+                <span class="tag">Remodeling</span>
+                <h3>Can I tile over old vinyl flooring, or do I need to rip it up?</h3>
+                <p class="meta">27 answers</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="wrap">
+        <p class="label">How it works</p>
+        <h2 class="serif">From problem to parts list to done</h2>
+        <div class="grid">
+          <article class="card"><p class="num serif">01</p><h3 class="serif">Post your problem</h3><p>Snap a photo, describe what's wrong. AI helps you name the parts and ask a clear question.</p></article>
+          <article class="card"><p class="num serif">02</p><h3 class="serif">Get answers from people</h3><p>Neighbors, hobbyists and tradespeople who've fixed the same thing reply and vote up what works.</p></article>
+          <article class="card"><p class="num serif">03</p><h3 class="serif">Walk in with a list</h3><p>Every solved thread ends with a parts and tools list you can take straight to the store.</p></article>
+        </div>
+        <p class="callout"><strong>Safety first.</strong> Some jobs — gas lines, main electrical panels, structural changes — belong to licensed professionals. HandyHuman will flag those clearly instead of pretending everything is DIY.</p>
+      </div>
+    </section>
+
+    <section class="block closing">
+      <div class="wrap">
+        <h2 class="serif">Got a project waiting in the garage?</h2>
+        <a class="btn primary" href="index.html#contact">Join the waitlist</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>© <span id="y">2026</span> Lirico AI</span>
+      <a href="index.html">lirico-ai.github.io</a>
+    </div>
+  </footer>
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+</html>

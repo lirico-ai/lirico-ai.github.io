@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Roamigo</title>
+  <meta name="description" content="Roamigo — find your people around the world. Locals and newcomers sharing everyday living, places worth going, and experiences only locals know.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="community.css">
+  <style>
+    :root { --accent: #0b7a83; }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --accent: #5cc8d1; } }
+    :root[data-theme="dark"] { --accent: #5cc8d1; }
+
+    .topics { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+    .topics .emoji { font-size: 28px; line-height: 1; display: block; margin-bottom: 10px; }
+
+    .stories { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    @media (max-width: 760px) { .stories { grid-template-columns: 1fr; } }
+    .story { display: flex; flex-direction: column; gap: 8px; }
+    .story .place { font-size: 13px; font-weight: 600; color: var(--muted); }
+    .story h3 { margin: 0; }
+    .story .meta { font-size: 13px; color: var(--muted); margin-top: auto; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <a class="logo" href="index.html"><img src="logo-nav.png" alt="Lirico"></a>
+      <a class="back" href="index.html#communities">← All communities</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <p class="badge">A Lirico community · Coming soon</p>
+        <h1 class="serif">Find your people <em>around the world</em>.</h1>
+        <p class="lede">Roamigo is where locals and newcomers share what guidebooks miss — how daily life really works, places worth the trip, and experiences you'd only find through a friend who lives there.</p>
+        <div class="cta">
+          <a class="btn primary" href="index.html#contact">Join the waitlist</a>
+          <a class="btn" href="#preview">See what people share</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="wrap">
+        <p class="label">What we share</p>
+        <h2 class="serif">The city, as the people who live there see it</h2>
+        <div class="grid topics">
+          <article class="card"><span class="emoji" aria-hidden="true">🏠</span><h3 class="serif">Local living</h3><p>Renting, groceries, transit, paperwork — how everyday life actually works here.</p></article>
+          <article class="card"><span class="emoji" aria-hidden="true">📍</span><h3 class="serif">Worth-going places</h3><p>The bakery, trail or viewpoint locals return to — and the hyped spots to skip.</p></article>
+          <article class="card"><span class="emoji" aria-hidden="true">🧳</span><h3 class="serif">Living experiences</h3><p>What it's like to move, study or work somewhere new, from people who've done it.</p></article>
+          <article class="card"><span class="emoji" aria-hidden="true">🎎</span><h3 class="serif">Local-only experiences</h3><p>Festivals, night markets, neighborhood traditions you won't find in a travel app.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="preview">
+      <div class="wrap">
+        <p class="label">Preview</p>
+        <h2 class="serif">Stories from around the world</h2>
+        <p class="example-note">Example posts for illustration.</p>
+        <div class="stories">
+          <article class="card story">
+            <span class="place">📍 Lisbon, Portugal</span>
+            <span class="tag" style="align-self:flex-start">Local living</span>
+            <h3 class="serif">First month in Lisbon: what I wish I knew about renting</h3>
+            <p class="meta">Shared by a newcomer · 24 replies from locals</p>
+          </article>
+          <article class="card story">
+            <span class="place">📍 Kyoto, Japan</span>
+            <span class="tag" style="align-self:flex-start">Worth-going places</span>
+            <h3 class="serif">Quiet temples locals actually visit on a weekday morning</h3>
+            <p class="meta">Shared by a local · 41 saves</p>
+          </article>
+          <article class="card story">
+            <span class="place">📍 Mexico City, Mexico</span>
+            <span class="tag" style="align-self:flex-start">Local-only experiences</span>
+            <h3 class="serif">How to find the neighborhood tianguis — and what to eat there</h3>
+            <p class="meta">Shared by a local · 18 replies</p>
+          </article>
+          <article class="card story">
+            <span class="place">📍 Taipei, Taiwan</span>
+            <span class="tag" style="align-self:flex-start">Living experiences</span>
+            <h3 class="serif">A year studying in Taipei: making friends beyond campus</h3>
+            <p class="meta">Shared by an international student · 32 replies</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="wrap">
+        <p class="label">How it works</p>
+        <h2 class="serif">Arrive as a stranger, leave with friends</h2>
+        <div class="grid">
+          <article class="card"><p class="num serif">01</p><h3 class="serif">Pick a place</h3><p>Where you live, where you're moving, or where you're dreaming of going.</p></article>
+          <article class="card"><p class="num serif">02</p><h3 class="serif">Ask and share</h3><p>Post questions and stories. AI helps translate, so language is never the barrier.</p></article>
+          <article class="card"><p class="num serif">03</p><h3 class="serif">Meet your people</h3><p>Connect with locals and fellow newcomers who share your interests — online or for a coffee.</p></article>
+        </div>
+        <p class="callout"><strong>Be a good guest.</strong> Roamigo is built on respect for the people and places being shared. Some spots are special because they're quiet — locals decide what to make public.</p>
+      </div>
+    </section>
+
+    <section class="block closing">
+      <div class="wrap">
+        <h2 class="serif">Every city feels like home with the right people.</h2>
+        <a class="btn primary" href="index.html#contact">Join the waitlist</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>© <span id="y">2026</span> Lirico AI</span>
+      <a href="index.html">lirico-ai.github.io</a>
+    </div>
+  </footer>
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+</html>
