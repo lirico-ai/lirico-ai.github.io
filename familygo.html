@@ -7,16 +7,33 @@
   <meta name="description" content="FamilyGo — it takes a village to raise a child. We help you find yours. Tell us your district and we'll show you every option nearby.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="community.css">
   <style>
     :root { --accent: #c2416b; }
     @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --accent: #ff8fb1; } }
     :root[data-theme="dark"] { --accent: #ff8fb1; }
 
+    /* FamilyGo theme font: elegant Playfair Display serif */
+    .serif { font-family: "Playfair Display", Georgia, serif; }
+    h1.serif, h2.serif, h3.serif, h4.serif, .serif h1, .serif h2 { font-weight: 600; letter-spacing: -.01em; }
+    .serif em, h1 em, h2 em, .promise em { font-style: italic; font-weight: 500; }
+    .statement, .results h3 { font-weight: 500; }
+
     /* FamilyGo logo is full color: no dark-mode invert; sit it on a light chip instead */
     .logo img { height: 56px; filter: none !important; }
     header .wrap { min-height: 76px; }
+    .top-nav { display: flex; align-items: center; gap: 20px; }
+    .top-nav a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; white-space: nowrap; }
+    .top-nav a:hover { color: var(--text); }
+    .top-nav a.pill { color: var(--accent-ink); background: var(--accent); padding: 7px 14px; border-radius: 999px; }
+    .top-nav a.pill:hover { color: var(--accent-ink); filter: brightness(1.06); }
+    @media (max-width: 900px) { .top-nav { gap: 14px; } .top-nav a[href$="#offers"] { display: none; } }
+    @media (max-width: 640px) {
+      header .wrap { flex-wrap: wrap; padding-top: 8px; padding-bottom: 8px; }
+      .top-nav { width: 100%; overflow-x: auto; gap: 16px; padding-bottom: 4px; }
+      .top-nav a[href$="#offers"] { display: inline; }
+    }
     @media (prefers-color-scheme: dark) {
       :root:not([data-theme="light"]) .logo img { background: #fbfaf7; border-radius: 10px; padding: 4px 8px; }
     }
@@ -28,6 +45,19 @@
 
     /* Original illustration: a village of families */
     .village { display: block; width: 100%; max-width: 820px; height: auto; margin: 8px auto 36px; border-radius: 20px; }
+    .hero-map { max-width: 740px; margin-bottom: 10px; border-radius: 0; overflow: visible; }
+    .hero-map .sun-rays { stroke: color-mix(in srgb, #f2b44b 75%, var(--bg)); stroke-width: 6; stroke-linecap: round; fill: none; }
+    .hero-map .sun-halo { fill: color-mix(in srgb, #f2b44b 30%, var(--bg)); }
+    @media (prefers-reduced-motion: no-preference) {
+      .hero-map .sun-rays { animation: rays-spin 18s linear infinite, rays-pulse 3s ease-in-out infinite alternate; transform-box: view-box; transform-origin: 95px 540px; }
+      .hero-map .sun-halo { animation: halo 3s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center; }
+    }
+    @keyframes rays-spin  { to { rotate: 360deg; } }
+    @keyframes rays-pulse { from { scale: .92; opacity: .75; } to { scale: 1.06; opacity: 1; } }
+    @keyframes halo       { from { transform: scale(1); opacity: .5; } to { transform: scale(1.35); opacity: .15; } }
+    .village.hero-map .hill-front { fill: color-mix(in srgb, var(--accent) 26%, var(--bg)); }
+    .where-now { font-size: 15px; color: var(--muted); margin: 0 0 32px; }
+    .link-btn { font: inherit; font-weight: 600; color: var(--accent); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
     .village .hill-back { fill: color-mix(in srgb, var(--accent) 10%, var(--bg)); }
     .village .hill-front { fill: color-mix(in srgb, var(--accent) 18%, var(--bg)); }
     .village .sun { fill: color-mix(in srgb, #f2b44b 55%, var(--bg)); }
@@ -53,25 +83,42 @@
     @keyframes hop-kid { 0%, 30%, 100% { transform: translateY(0); } 15% { transform: translateY(-10px); } }
     @keyframes sway    { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
     @keyframes glow    { from { transform: scale(1); } to { transform: scale(1.08); } }
-    @keyframes drift   { from { transform: translateX(880px); } to { transform: translateX(-60px); } }
+    @keyframes drift   { from { transform: translateX(1060px); } to { transform: translateX(-60px); } }
     @keyframes twinkle { 0%, 100% { opacity: 1; } 50% { opacity: .55; } }
-    .sub { font-style: italic; font-size: clamp(22px, 2.8vw, 30px); margin: 0 0 28px; }
+    .sub { font-style: italic; font-weight: 400; font-size: clamp(22px, 2.8vw, 30px); margin: 0 0 28px; }
     .sub em { color: var(--accent); }
     /* Lede breaks at the dash on wide screens, balanced wrapping on narrow ones */
-    .hero .lede { max-width: none; }
+    .hero .lede { max-width: none; font-size: 17px; line-height: 1.7; color: color-mix(in srgb, var(--text) 68%, var(--bg)); margin-bottom: 0; }
     .hero .lede .line { display: block; }
     @media (min-width: 1000px) { .hero .lede .line { white-space: nowrap; } }
     @media (max-width: 999px) { .hero .lede { max-width: 36em; } .hero .lede .line { display: inline; } }
 
+    .na-map { display: block; width: 100%; height: auto; overflow: hidden; }
+    .na-map .land { fill: color-mix(in srgb, var(--accent) 16%, var(--bg)); stroke: var(--bg); stroke-width: 1; }
+    .na-map .land-dim { fill: color-mix(in srgb, var(--text) 7%, var(--bg)); }
+    .na-map .state-lines { fill: none; stroke: var(--bg); stroke-width: .9; }
+    .na-map .pin { cursor: pointer; }
+    .na-map .dot { fill: var(--accent); stroke: var(--surface); stroke-width: 3.5; }
+    .na-map .pulse { fill: var(--accent); opacity: 0; }
+    .na-map .pin-label { font: 600 24px Inter, system-ui, sans-serif; fill: var(--text); paint-order: stroke; stroke: var(--bg); stroke-width: 7px; stroke-linejoin: round; }
+    .na-map .pin:hover .dot { fill: color-mix(in srgb, var(--accent) 80%, #000); }
+    @media (prefers-reduced-motion: no-preference) {
+      .na-map .pulse { animation: pin-pulse 2.4s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+      .na-map .p2 { animation-delay: 1.2s; }
+    }
+    @keyframes pin-pulse { 0% { transform: scale(.6); opacity: .55; } 100% { transform: scale(3.2); opacity: 0; } }
+
     /* District finder */
-    #district { max-width: 1040px; margin: 40px auto 0; }
-    .ask { font-style: italic; font-size: 19px; color: var(--muted); margin: 0 0 14px; }
+    #district { max-width: 1040px; margin: 56px auto 0; }
+    /* Rounded, friendly face that echoes the FamilyGo logo */
+    .ask { font-family: "Playfair Display", Georgia, serif; font-weight: 500; font-size: clamp(22px, 2.4vw, 28px); line-height: 1.3; letter-spacing: -.005em; color: var(--text); margin: 0 0 20px; text-wrap: balance; }
+    .ask em { font-style: italic; font-weight: 500; color: var(--accent); }
     .finder { padding: 28px; text-align: left; }
     .finder form { text-align: center; margin: 0 0 8px; }
     /* "I live in ___ with my ___ year-old kid." */
     .sentence {
       display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; gap: 4px 8px;
-      font-family: Fraunces, Georgia, serif; font-size: clamp(18px, 2vw, 22px); line-height: 1.7; margin: 4px 0 20px;
+      font-family: "Playfair Display", Georgia, serif; font-size: clamp(18px, 2vw, 22px); line-height: 1.7; margin: 4px 0 20px;
     }
     .sentence label { cursor: pointer; }
     .phrase { display: inline-flex; align-items: baseline; gap: 8px; white-space: nowrap; }
@@ -90,13 +137,24 @@
     .age-pick::after { content: "▾"; position: absolute; right: 6px; top: 50%; transform: translateY(-50%); pointer-events: none; font-size: 13px; color: var(--accent); }
     .finder .hint { font-size: 13px; color: var(--muted); margin: 0; }
     .chips-label { font-size: 14px; font-weight: 600; margin: 20px 0 10px; text-align: center; }
-    .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 0 0 16px; }
+    .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 0 0 16px; padding-top: 6px; }
     .chip {
-      font: inherit; font-size: 14px; color: var(--text); cursor: pointer;
-      background: var(--bg); border: 1px solid var(--border); border-radius: 999px; padding: 7px 14px;
+      font: inherit; font-size: 13.5px; color: var(--text); cursor: pointer; white-space: nowrap;
+      background: var(--bg); border: 1px solid var(--border); border-radius: 999px; padding: 6px 12px;
     }
     .chip:hover { border-color: var(--accent); }
-    .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+    /* Selected tags: soft tint + outline + check, so they don't look like the solid action button */
+    .chip[aria-pressed="true"] {
+      background: color-mix(in srgb, var(--accent) 12%, var(--surface)); border-color: var(--accent);
+      box-shadow: inset 0 0 0 1px var(--accent); color: var(--accent);
+    }
+    /* Check badge sits on the corner so selecting a tag never changes its width */
+    .chip { position: relative; }
+    .chip[aria-pressed="true"]::after {
+      content: "✓"; position: absolute; top: -6px; right: -4px; width: 17px; height: 17px; border-radius: 50%;
+      display: grid; place-items: center; font-size: 10px; font-weight: 700; line-height: 1;
+      background: var(--accent); color: var(--accent-ink); box-shadow: 0 0 0 2px var(--surface);
+    }
 
     /* City suggestions */
     .suggest {
@@ -119,6 +177,104 @@
     .results h3 { margin: 0 0 16px; font-size: 22px; font-weight: 500; }
     .results h3 b { color: var(--accent); font-weight: 500; }
     .options { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; }
+    .options[hidden] { display: none; }
+
+    /* Places / Calendar switch */
+    .view-toggle { display: inline-flex; gap: 4px; padding: 4px; margin: 0 0 18px; background: var(--bg); border: 1px solid var(--border); border-radius: 999px; }
+    .view-toggle button { font: inherit; font-size: 14px; font-weight: 500; color: var(--muted); background: none; border: 0; border-radius: 999px; padding: 7px 16px; cursor: pointer; }
+    .view-toggle button[aria-selected="true"] { background: var(--surface); color: var(--text); font-weight: 600; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+
+    /* Calendar: week view with expandable neighbouring weeks */
+    .calendar { margin-bottom: 40px; }
+    .calendar[hidden] { display: none; }
+    .wk-head { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+    .wk-head h4 { margin: 0 0 0 6px; font-family: "Playfair Display", Georgia, serif; font-weight: 500; font-size: 20px; }
+    .wk-today { font: inherit; font-size: 14px; font-weight: 600; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+    .wk-today:hover, .cal-nav:hover:not(:disabled) { border-color: var(--accent); }
+    .cal-nav:disabled { opacity: .35; cursor: default; }
+    .cal-nav { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: 18px; line-height: 1; cursor: pointer; }
+    #weeks { display: grid; gap: 8px; }
+    .wk { border: 1px solid var(--border); border-radius: 14px; background: var(--surface); overflow: hidden; }
+    .wk.current { border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); }
+    .wk-bar { width: 100%; display: flex; align-items: center; gap: 10px; font: inherit; font-size: 14.5px; color: var(--text); background: var(--bg); border: 0; padding: 11px 16px; cursor: pointer; text-align: left; }
+    .wk-bar:hover { background: color-mix(in srgb, var(--accent) 6%, var(--bg)); }
+    .wk-bar .chev { transition: transform .2s ease; color: var(--muted); }
+    .wk-bar[aria-expanded="true"] .chev { transform: rotate(90deg); }
+    .wk-bar .range { font-weight: 600; }
+    .wk-bar .wk-badge { font-size: 11.5px; font-weight: 700; color: var(--accent-ink); background: var(--accent); border-radius: 999px; padding: 1px 8px; }
+    .wk-bar .count { margin-left: auto; font-size: 13px; color: var(--muted); display: inline-flex; align-items: center; gap: 6px; }
+    .wk-bar.past .range { color: var(--muted); }
+    @media (max-width: 720px) { .wk-bar { flex-wrap: wrap; row-gap: 4px; } .wk-bar .count { margin-left: 24px; flex-basis: 100%; } .wk-head h4 { flex-basis: 100%; margin: 6px 0 0; } }
+    .wk-body { padding: 0 12px 14px; }
+    .wk-body[hidden] { display: none; }
+    .wk-empty { color: var(--muted); font-size: 14px; padding: 6px 4px 2px; margin: 0; }
+
+    .tg { display: grid; grid-template-columns: 52px repeat(7, minmax(0, 1fr)); }
+    .tg-dayhead { padding: 10px 6px 6px; border-left: 1px solid var(--border); font-size: 12px; color: var(--muted); }
+    .tg-dayhead b { display: block; font-size: 18px; font-weight: 600; color: var(--text); line-height: 1.2; }
+    .tg-dayhead.today { color: var(--accent); }
+    .tg-dayhead.today b { color: var(--accent); }
+    .tg-dayhead.past b { color: var(--muted); }
+    .tg-dayhead.tomorrow { background: color-mix(in srgb, var(--accent) 10%, transparent); border-radius: 8px 8px 0 0; color: var(--accent); font-weight: 600; }
+    .tg-label { font-size: 11px; color: var(--muted); text-align: right; padding-right: 8px; }
+    .tg-allday { border-left: 1px solid var(--border); border-top: 1px solid var(--border); padding: 4px; display: grid; gap: 3px; align-content: start; }
+    .tg-hours { position: relative; }
+    .tg-hours span { position: absolute; right: 8px; transform: translateY(-50%); font-size: 11px; color: var(--muted); white-space: nowrap; }
+    .tg-col { position: relative; border-left: 1px solid var(--border); border-top: 1px solid var(--border);
+      background-image: repeating-linear-gradient(to bottom, var(--border) 0 1px, transparent 1px var(--hour)); }
+    .tg-col.today { background-color: color-mix(in srgb, var(--accent) 5%, transparent); }
+    .tg-col.empty:not(.today) { background-color: color-mix(in srgb, var(--text) 2.5%, transparent); }
+    .tg-dayhead { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .tg-dayhead.empty { text-align: center; padding-left: 2px; padding-right: 2px; }
+    .tg-dayhead.empty b { font-size: 15px; }
+    .tg-col { transition: none; }
+    .blk {
+      position: absolute; left: calc(var(--lane) * var(--w) + 2px); width: calc(var(--w) - 4px); overflow: hidden;
+      font: inherit; text-align: left; cursor: pointer; padding: 4px 6px; border: 0; border-left: 3px solid var(--c); border-radius: 6px;
+      background: color-mix(in srgb, var(--c) 18%, var(--surface)); color: var(--text); line-height: 1.2;
+    }
+    .blk:hover, .blk[aria-pressed="true"] { background: color-mix(in srgb, var(--c) 32%, var(--surface)); }
+    .blk[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--c); }
+    .blk b { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 11.5px; font-weight: 600; }
+    .blk small { display: block; font-size: 10.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
+    .tg-allday .blk { position: static; width: auto; }
+    .blk.narrow { padding: 3px 4px; }
+    .blk.narrow small { display: none; }
+    .blk.narrow b { font-size: 10.5px; -webkit-line-clamp: 4; word-break: break-word; }
+    /* Free events: gold crown */
+    .blk.free { box-shadow: inset 0 0 0 1.5px #e6b422; }
+    .blk.free[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--c), inset 0 0 0 1.5px #e6b422; }
+    .blk .crown { position: absolute; top: 2px; right: 3px; width: 14px; height: auto; filter: drop-shadow(0 1px 1px rgba(0,0,0,.2)); }
+    .crown-img { width: 16px; height: auto; margin-right: 4px; vertical-align: -2px; }
+    .blk.free b { padding-right: 14px; }
+    .free-pill {
+      display: inline-flex; align-items: center; gap: 3px; margin: 4px 0 2px; padding: 1px 9px 1px 7px; border-radius: 999px;
+      font-size: 12px; font-weight: 700; color: #7a5600; background: linear-gradient(135deg, #fff1b8, #ffd966); border: 1px solid #e6b422;
+    }
+    .event.free { background: color-mix(in srgb, #ffd966 10%, var(--bg)); }
+    .free-count { display: inline-flex; align-items: center; margin-left: 8px; font-size: 12px; font-weight: 700; color: #8a6300; background: #fff1b8; border: 1px solid #e6b422; border-radius: 999px; padding: 0 8px; }
+    .wk-detail { margin-top: 12px; list-style: none; padding: 0; }
+    .wk-detail:empty { display: none; }
+    /* Phones: each week becomes a simple list of days */
+    .wk-list { display: grid; gap: 14px; }
+    .wk-list h5 { margin: 0 0 6px; font-size: 14px; font-weight: 700; }
+    .wk-list h5.today { color: var(--accent); }
+    .wk-list ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+    .cal-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-left: auto; font-size: 12.5px; color: var(--muted); }
+    @media (max-width: 720px) { .cal-legend { margin-left: 0; flex-basis: 100%; margin-top: 4px; } }
+    .cal-legend span { display: inline-flex; align-items: center; gap: 5px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .event { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 12px; padding: 12px 14px; background: var(--bg); border: 1px solid var(--border); border-left: 4px solid var(--c, var(--accent)); border-radius: 12px; }
+    .event .time { font-size: 13px; font-weight: 700; color: var(--c, var(--accent)); line-height: 1.35; }
+    .event .time span { display: block; white-space: nowrap; }
+    .event .time .to { font-weight: 500; color: var(--muted); font-size: 12px; }
+    .event a.title { display: block; font-weight: 600; color: var(--text); text-decoration: none; line-height: 1.3; }
+    .event a.title:hover { color: var(--accent); text-decoration: underline; }
+    .event .ev-where, .event .ev-note { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+    .event .ev-note { font-style: italic; margin-top: 4px; }
+    .event .actions { margin-top: 8px; display: flex; gap: 12px; flex-wrap: wrap; }
+    .event .actions a, .event .actions button { font: inherit; font-size: 12.5px; font-weight: 600; color: var(--accent); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: none; }
+    .event .actions a:hover, .event .actions button:hover { text-decoration: underline; }
 
     /* Category rows that scroll sideways */
     .rail-row h4 { margin: 0 0 10px; font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
@@ -126,7 +282,6 @@
     .rail-row h4 .anim { display: inline-flex; }
     .anim svg { width: 64px; height: 48px; overflow: visible; }
     .anim .chalk { font: 700 9px/1 "Comic Sans MS", "Chalkboard", cursive; fill: #fff; }
-    .anim .zz { font: 700 8px/1 Inter, sans-serif; fill: var(--muted); }
     @media (prefers-reduced-motion: no-preference) {
       .anim .chalk { animation: chalk 4s infinite; }
       .anim .c2 { animation-delay: .8s; } .anim .c3 { animation-delay: 1.6s; }
@@ -137,15 +292,7 @@
       .anim .carrot { animation-delay: .3s; } .anim .dino { animation-delay: .6s; }
       .anim .steam { animation: steam 2.4s ease-out infinite; } .anim .s2 { animation-delay: .8s; } .anim .s3 { animation-delay: 1.6s; }
       .anim .swing { animation: swing 2s ease-in-out infinite alternate; transform-origin: 24px 3px; }
-      .anim .heart { animation: beat 1.2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
-      .anim .ecg { stroke-dasharray: 70; animation: ecg 1.2s linear infinite; }
-      .anim .cradle { animation: rock 2.4s ease-in-out infinite alternate; transform-origin: 24px 30px; }
-      .anim .zz { animation: zz 2.4s ease-out infinite; } .anim .z2 { animation-delay: 1.2s; }
       .anim .kid { animation: hop 1.2s ease-in-out infinite; } .anim .k2 { animation-delay: .6s; }
-      .anim .balloon { animation: float 3s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 50% 100%; }
-      .anim .popper { animation: pop 2.2s ease-in-out infinite; transform-origin: 6px 32px; }
-      .anim .pc { animation: burst 2.2s ease-out infinite; transform-box: fill-box; transform-origin: center; }
-      .anim .p2, .anim .p5 { animation-delay: .05s; } .anim .p3, .anim .p6 { animation-delay: .1s; }
       .anim .bag { animation: sway 1.6s ease-in-out infinite alternate; transform-origin: 20px 6px; }
       .anim .teddy { animation: peek 2.4s ease-in-out infinite; }
       .anim .block { animation: hop 1.6s ease-in-out infinite; animation-delay: .4s; }
@@ -158,14 +305,7 @@
     @keyframes wiggle  { 0%, 100% { transform: translateY(0) rotate(0); } 25% { transform: translateY(-2px) rotate(-6deg); } 50% { transform: translateY(0) rotate(0); } 75% { transform: translateY(-1px) rotate(5deg); } }
     @keyframes steam   { 0% { transform: translateY(4px); opacity: 0; } 30% { opacity: 1; } 100% { transform: translateY(-6px); opacity: 0; } }
     @keyframes swing   { from { transform: rotate(-28deg); } to { transform: rotate(28deg); } }
-    @keyframes beat    { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.12); } 30% { transform: scale(.97); } 45% { transform: scale(1.08); } }
-    @keyframes ecg     { from { stroke-dashoffset: 70; } to { stroke-dashoffset: -70; } }
-    @keyframes rock    { from { transform: rotate(-9deg); } to { transform: rotate(9deg); } }
-    @keyframes zz      { 0% { transform: translate(0, 4px); opacity: 0; } 30% { opacity: 1; } 100% { transform: translate(3px, -4px); opacity: 0; } }
-    @keyframes float   { from { transform: translateY(2px) rotate(-6deg); } to { transform: translateY(-3px) rotate(6deg); } }
     @keyframes sway    { from { transform: rotate(-8deg); } to { transform: rotate(8deg); } }
-    @keyframes pop     { 0%, 55%, 100% { transform: rotate(0); } 62% { transform: rotate(-10deg) scale(1.05); } 72% { transform: rotate(3deg); } }
-    @keyframes burst   { 0%, 58% { opacity: 0; transform: translate(-4px, 4px) scale(.3); } 66% { opacity: 1; transform: translate(0, 0) scale(1.1); } 90% { opacity: 1; transform: translate(1px, -1px) scale(1); } 100% { opacity: 0; } }
     @keyframes peek    { 0%, 100% { transform: translateY(2px); } 35%, 70% { transform: translateY(-1px); } }
     @keyframes sparkle { 0%, 100% { transform: scale(.4); opacity: .3; } 50% { transform: scale(1.1); opacity: 1; } }
     .rail-row h4 small { font-size: 12px; font-weight: 600; color: var(--muted); background: var(--bg); border: 1px solid var(--border); border-radius: 999px; padding: 0 8px; }
@@ -198,10 +338,7 @@
     .cover.art-activities { background: linear-gradient(135deg, #f08a4b, #ffc27a); }
     .cover.art-restaurants { background: linear-gradient(135deg, #e0565b, #ff9a8b); }
     .cover.art-parks { background: linear-gradient(135deg, #3f9b6a, #8fd19e); }
-    .cover.art-healthcare { background: linear-gradient(135deg, #2a9d9f, #7fd6cf); }
-    .cover.art-childcare { background: linear-gradient(135deg, #e6a93a, #ffd97a); }
     .cover.art-playdates { background: linear-gradient(135deg, #8a6fd1, #c3b1ff); }
-    .cover.art-events { background: linear-gradient(135deg, #d14f8a, #ff9cc6); }
     .cover.art-shopping { background: linear-gradient(135deg, #4b5fc2, #9aa8f5); }
 
     .where { margin: 28px 0 8px; padding: 22px; text-align: center; border: 1px dashed color-mix(in srgb, var(--accent) 45%, var(--border)); border-radius: 16px; background: color-mix(in srgb, var(--accent) 5%, transparent); }
@@ -229,15 +366,52 @@
     .empty-note { grid-column: 1 / -1; color: var(--muted); font-size: 14px; margin: 0; }
     .results .note { font-size: 13px; color: var(--muted); margin: 16px 0 0; }
 
-    .offers .emoji { font-size: 28px; line-height: 1; display: block; margin-bottom: 10px; }
-    .offers h3 small { display: block; font-family: Inter, system-ui, sans-serif; font-size: 13px; font-weight: 600; color: var(--accent); letter-spacing: .02em; margin-top: 4px; }
+    /* Six offers in a single row (scrolls sideways on small screens) */
+    .offers-wrap { max-width: 1240px; }
+    .grid.offers { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; }
+    .offers .card { padding: 18px 16px; }
+    .offers .card h3 { font-size: 18px; }
+    .offers .card p { font-size: 13.5px; line-height: 1.5; }
+    @media (max-width: 1100px) {
+      .grid.offers { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 220px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 10px; }
+      .offers .card { scroll-snap-align: start; }
+    }
+    .offers .emoji { font-size: 26px; line-height: 1; display: block; margin-bottom: 8px; }
+    .offers h3 small { display: block; font-family: Inter, system-ui, sans-serif; font-size: 12px; font-weight: 600; color: var(--accent); letter-spacing: .02em; margin-top: 4px; }
 
+    /* About: photo banner with frosted panels */
+    .about-wrap { max-width: 1240px; }
+    .about-banner { overflow: hidden; border-radius: 28px; color: #fff; background: #2f2c22; box-shadow: 0 20px 50px rgba(0,0,0,.18); }
+    .about-photo {
+      position: relative; min-height: 600px; padding: clamp(28px, 5vw, 56px);
+      background:
+        linear-gradient(180deg, rgba(25, 24, 16, .62) 0%, rgba(25, 24, 16, .15) 34%, rgba(25, 24, 16, 0) 50%, rgba(25, 24, 16, 0) 80%, #2f2c22 100%),
+        url("images/familygo-banner.jpg") center 22% / cover no-repeat;
+    }
+    .about-banner .label { color: rgba(255,255,255,.85); }
+    .about-head h2 { color: #fff; margin: 0; font-size: clamp(32px, 4.4vw, 52px); text-shadow: 0 2px 14px rgba(0,0,0,.35); }
+    .about-head h2 em { color: #ffd6a0; }
+    .about-panels { display: grid; grid-template-columns: 1fr; padding: 8px clamp(20px, 4vw, 48px) clamp(24px, 4vw, 44px); }
+    .about-panels .glass { padding: 22px 28px; }
+    .about-panels .glass p:last-child { font-size: 16px; }
+    @media (max-width: 760px) { .about-panels { grid-template-columns: 1fr; } .about-photo { min-height: 300px; } }
+    .glass {
+      padding: 20px 24px; border-radius: 20px; border: 1px solid rgba(255,255,255,.28);
+      background: rgba(255, 255, 255, .06);
+    }
+    .glass p { margin: 0; color: rgba(255,255,255,.88); font-size: 15px; line-height: 1.6; }
+    .glass p + p { margin-top: 10px; }
+    .glass .label { margin-bottom: 10px; font-size: 12px; }
+    .glass .statement { color: #fff !important; font-size: 20px; margin-bottom: 10px !important; }
+    .photo-credit { position: absolute; right: 16px; bottom: 10px; font-size: 11px; color: rgba(255,255,255,.65); text-decoration: none; }
+    .photo-credit:hover { color: #fff; text-decoration: underline; }
     .split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     @media (max-width: 760px) { .split { grid-template-columns: 1fr; } }
     .split .card p + p { margin-top: 12px; }
-    .statement { font-family: Fraunces, Georgia, serif; font-size: 22px; line-height: 1.3; color: var(--text) !important; margin-bottom: 12px !important; }
+    .statement { font-family: "Playfair Display", Georgia, serif; font-size: 22px; line-height: 1.3; color: var(--text) !important; margin-bottom: 12px !important; }
 
-    .promise { font-size: clamp(26px, 3.6vw, 38px); line-height: 1.3; max-width: 24ch; margin: 0 auto 32px; }
+    .promise { font-size: clamp(24px, 3vw, 36px); line-height: 1.3; max-width: none; margin: 0 auto 32px; text-wrap: balance; }
+    @media (min-width: 900px) { .promise .one-line { white-space: nowrap; } }
     .promise span { display: block; }
     .promise em { color: var(--accent); }
   </style>
@@ -246,7 +420,13 @@
   <header>
     <div class="wrap">
       <a class="logo" href="familygo.html"><img src="familygo-logo-nav.png" alt="FamilyGo"></a>
-      <a class="back" href="#about">About FamilyGo</a>
+      <nav class="top-nav" aria-label="FamilyGo">
+        <a href="#district" data-view-link="places">Find places</a>
+        <a href="#calendar" data-view-link="calendar">Events calendar</a>
+        <a href="#offers">What we offer</a>
+        <a href="#about">About</a>
+        <a class="pill" href="familygo-contact.html">Contact Us</a>
+      </nav>
     </div>
   </header>
 
@@ -255,43 +435,28 @@
       <div class="wrap">
         <h1 class="serif">It takes a village to <em>raise a child</em>.</h1>
         <p class="sub serif">We help you <em>find yours</em>.</p>
-        <svg class="village" viewBox="0 0 820 300" role="img" aria-label="Illustration of families holding hands in front of a small village">
-          <circle class="sun" cx="690" cy="70" r="38"/>
-          <!-- Clouds drift across the sky -->
-          <g class="cloud" style="--dur: 48s; --delay: -10s">
-            <ellipse cx="0" cy="62" rx="34" ry="12"/><ellipse cx="18" cy="52" rx="20" ry="14"/><ellipse cx="-14" cy="56" rx="16" ry="10"/>
+        <svg class="village na-map hero-map" viewBox="0 0 1000 720" role="img" aria-labelledby="hero-map-title">
+          <title id="hero-map-title">Families holding hands in front of a map of the United States, with Boston pinned</title>
+          <g class="sun-group"><circle class="sun-halo" cx="95" cy="540" r="46"/><path class="sun-rays" d="M145.0 540.0L163.0 540.0M140.0 566.0L148.7 571.0M120.0 583.3L129.0 598.9M95.0 592.0L95.0 602.0M70.0 583.3L61.0 598.9M50.0 566.0L41.3 571.0M45.0 540.0L27.0 540.0M50.0 514.0L41.3 509.0M70.0 496.7L61.0 481.1M95.0 488.0L95.0 478.0M120.0 496.7L129.0 481.1M140.0 514.0L148.7 509.0"/><circle class="sun" cx="95" cy="540" r="40"/></g>
+          <g class="cloud" style="--dur: 52s; --delay: -14s">
+            <ellipse cx="0" cy="40" rx="40" ry="14"/><ellipse cx="22" cy="28" rx="24" ry="17"/><ellipse cx="-16" cy="33" rx="19" ry="12"/>
           </g>
-          <g class="cloud" style="--dur: 64s; --delay: -38s">
-            <ellipse cx="0" cy="100" rx="28" ry="10"/><ellipse cx="12" cy="92" rx="16" ry="11"/>
+          <g class="cloud" style="--dur: 70s; --delay: -44s">
+            <ellipse cx="0" cy="110" rx="32" ry="11"/><ellipse cx="14" cy="100" rx="19" ry="13"/>
           </g>
-          <path class="hill-back" d="M0 210 C140 120 300 130 420 175 C540 220 680 120 820 150 L820 300 L0 300 Z"/>
-          <!-- Houses -->
-          <g>
-            <rect class="wall" x="96" y="150" width="56" height="44" rx="3"/>
-            <path class="roof" d="M88 152 L124 122 L160 152 Z"/>
-            <rect class="window" style="--delay: 0s" x="116" y="164" width="16" height="14" rx="2"/>
+          <!-- Map of the contiguous US (Natural Earth, public domain) -->
+          <g transform="translate(0 20)">
+            <path class="land" d="M99.0,16.0L141.6,27.7L186.4,38.5L201.4,41.8L247.8,50.9L293.0,58.4L339.2,64.5L385.6,69.2L438.3,72.7L491.4,74.4L523.6,74.4L523.6,65.6L528.8,65.4L531.7,78.0L536.6,81.9L547.6,83.1L563.6,86.3L579.2,92.8L591.7,89.2L611.4,94.0L616.6,93.4L630.1,85.8L645.6,92.9L661.8,100.4L675.5,106.8L688.7,112.8L690.9,118.7L695.0,120.5L694.3,122.9L698.7,123.1L701.5,120.3L703.0,125.7L706.7,129.0L711.1,128.4L713.8,130.9L712.4,135.3L730.8,143.8L737.3,164.4L743.5,184.1L740.6,198.5L734.5,212.5L731.9,221.2L731.8,223.6L734.2,226.7L740.5,229.6L744.9,229.0L762.8,213.6L779.7,207.1L799.8,191.7L799.7,189.3L796.9,182.5L793.4,178.5L800.2,173.4L816.4,170.3L831.6,167.2L835.0,157.2L836.7,155.0L850.4,134.8L856.7,128.9L881.1,123.0L910.6,115.6L910.7,109.5L915.5,107.1L921.3,101.7L924.0,89.9L923.9,71.1L930.9,50.9L937.7,55.3L946.8,48.4L955.5,52.8L964.8,83.2L979.0,92.7L984.0,99.2L970.4,115.2L956.2,127.9L941.1,139.5L936.2,155.3L934.8,161.2L937.9,173.2L946.6,183.8L953.7,182.4L949.7,174.6L956.1,178.3L956.6,185.1L946.3,192.0L938.1,193.7L926.7,201.0L919.6,204.0L910.1,207.6L897.5,217.7L921.4,207.2L927.6,210.2L905.4,223.1L894.5,225.7L894.4,222.8L890.7,230.4L896.0,230.2L896.1,247.6L887.5,268.3L884.8,262.6L880.7,262.3L873.7,257.8L880.1,269.4L885.4,272.5L887.6,281.2L883.9,291.4L877.8,312.0L876.0,311.5L878.1,294.6L867.1,287.7L861.0,268.9L859.7,279.6L866.6,293.5L854.0,292.3L867.9,297.2L873.3,319.1L878.8,319.5L882.4,327.1L890.0,349.7L881.8,369.3L863.9,380.1L854.1,396.1L845.0,399.3L836.9,409.6L835.6,417.9L817.0,436.6L807.9,449.4L800.9,464.6L800.4,481.6L806.4,497.1L816.2,515.8L827.8,530.7L829.6,540.6L843.8,565.6L845.7,581.2L846.3,590.2L843.4,605.0L837.5,608.9L826.7,607.8L821.8,598.3L813.0,594.3L799.0,576.2L786.8,560.0L782.4,551.4L784.5,535.5L777.0,523.5L758.7,506.3L750.4,503.7L731.4,516.7L727.6,515.9L716.7,506.2L703.5,501.7L681.1,506.8L663.1,505.7L647.9,508.5L639.8,512.7L643.9,518.7L644.2,528.2L648.8,532.5L645.2,535.8L637.4,532.9L630.0,537.8L615.1,537.9L599.3,526.4L581.7,530.0L566.8,525.1L554.2,527.0L537.2,532.8L518.7,550.3L498.3,560.4L486.9,571.4L481.9,581.8L481.5,597.8L482.4,609.0L486.3,616.9L478.0,617.5L463.1,612.1L446.8,604.5L441.2,593.4L437.2,576.9L425.5,563.2L419.0,549.2L409.5,532.7L395.7,522.6L379.1,522.0L365.0,539.5L348.6,531.2L338.8,523.2L334.9,509.9L329.4,497.1L318.6,485.7L309.2,477.3L302.9,468.2L268.9,464.1L267.6,473.7L251.9,471.6L212.8,466.0L171.0,442.0L144.0,425.2L146.7,421.0L121.8,418.5L99.7,415.5L99.1,403.0L89.9,387.0L81.8,382.2L81.4,375.1L71.2,371.4L66.0,363.6L49.4,356.9L45.6,352.0L46.7,338.9L35.3,311.2L29.4,275.4L31.5,270.3L25.9,260.6L18.1,237.6L21.3,218.5L16.0,203.4L25.4,185.8L30.7,166.3L30.8,147.5L43.7,128.2L51.8,108.5L59.9,88.7L66.2,57.9L67.2,37.4L66.0,25.8L69.1,22.0L88.6,36.1L90.6,59.5L96.1,54.7L98.9,35.7L99.0,16.0Z"/>
+            <path class="state-lines" d="M878.8,211.8L875.7,210.8L872.4,209.8L870.6,206.7L870.5,204.1L868.0,202.5L863.5,199.7L840.6,204.5L815.9,209.4L789.4,214.2L788.5,208.6M648.9,159.0L648.6,158.9L648.6,158.9L646.2,156.4L647.1,152.5L643.5,152.6L643.9,148.8L644.7,146.8L643.0,143.7L639.0,142.5L637.8,138.8L634.6,138.7L630.1,139.0L620.4,135.6L606.0,132.3L604.4,128.2L601.8,127.6L601.8,127.5L600.9,128.1M591.1,200.7L590.5,198.1L590.2,192.5L589.5,190.5L583.7,187.3L579.3,183.5L578.0,181.0L576.1,179.5L570.6,176.4L568.6,176.3L563.6,171.9L563.9,166.8L563.7,160.4L564.8,154.5L561.2,150.2L563.4,145.9L566.8,143.5L570.7,140.8L571.2,140.8L570.5,127.7L574.7,126.2M781.7,248.0L776.7,217.3M704.1,234.2L712.9,233.0L720.8,232.0L727.2,231.0M926.8,200.9L927.0,197.3L923.6,184.9M894.9,191.1L898.2,208.8L900.0,210.4L896.9,213.6L898.2,216.2M631.5,363.6L631.2,365.9L630.3,369.3L629.2,375.2M536.1,366.7L536.1,355.9L536.0,355.9M803.5,266.3L785.2,269.4L781.7,248.0M753.1,305.5L757.5,304.3L759.3,300.7L758.9,295.5L760.6,290.0L763.1,290.2L763.7,292.8L765.2,291.6L765.4,289.3L765.5,285.0L768.8,280.3L771.1,280.5L773.3,279.5L775.2,278.1L779.2,272.0L779.1,269.5L780.0,264.2L780.8,257.9L780.7,252.4L779.5,249.5L781.7,248.0M659.2,397.2L638.3,398.2L619.7,399.5M602.3,223.6L619.8,222.5L637.6,221.2L650.8,220.4M591.2,274.6L589.9,280.5L591.9,287.5L595.1,292.2L598.7,296.0L603.0,299.0L604.7,300.0L606.4,304.4L606.9,308.3L609.0,309.2L612.3,307.5L616.0,311.0L615.2,315.5L613.8,319.0L612.9,323.2L615.6,326.6L619.5,329.7L621.5,329.6L626.6,334.5L628.5,335.1L630.3,340.7L629.9,344.3L632.6,349.9L634.6,349.1L638.1,352.6M604.9,447.8L606.4,449.0L604.8,452.5L607.8,457.2L607.2,460.2L609.9,464.1L607.3,466.6L606.6,471.1L603.0,474.9L601.5,480.0L599.9,485.7L597.6,488.4L598.7,494.2L616.4,494.1L635.2,493.0L634.8,496.9L633.8,500.8L635.2,503.7L638.1,506.3L639.0,510.1L639.6,512.4M179.0,324.7L208.4,329.7L243.4,335.5L270.0,339.5M731.9,390.0L731.7,385.0L735.5,383.0L736.4,380.3L738.7,377.1L742.5,376.0L746.7,374.4L750.7,371.8L752.3,369.5L755.6,367.1L755.2,365.4L759.5,361.6L761.3,363.4L767.5,358.1L770.7,358.0L773.0,353.7L776.6,352.1L775.9,348.8L775.9,345.8M755.3,387.1L757.1,386.2L766.7,380.7L784.0,378.3L793.0,378.0L793.4,380.1L795.1,378.2L798.6,381.7L799.0,384.4L819.9,381.2L845.0,399.3M893.9,217.8L878.8,211.8M878.8,211.8L876.9,213.3L875.1,219.1L872.9,221.7L874.4,224.5L873.1,227.8L873.8,231.5L875.8,231.8L876.7,234.2L883.4,238.9L881.8,241.9L878.4,245.9L877.4,247.6L874.3,250.5M522.6,285.2L520.2,280.1L517.5,277.1L514.5,273.4L514.1,271.4M502.9,202.7L503.2,180.8L501.3,158.4L498.5,156.5L496.9,152.9L497.8,149.7L501.5,147.1L501.8,143.7M502.7,226.5L499.9,226.2L498.4,225.0L497.6,223.1L493.0,221.1L488.6,218.0L482.5,218.1L478.4,218.0L477.0,219.0L470.7,217.0L466.4,213.9L432.3,212.6L406.8,211.2L373.7,208.7M629.2,375.2L629.1,377.1L627.5,380.6L624.3,383.1L623.8,387.0L621.1,390.3L621.7,397.2L619.7,399.5M536.1,366.7L558.7,366.6L579.3,366.0L598.9,365.1L620.2,365.4L621.9,368.2L620.0,370.9L618.0,373.5L617.0,375.9L629.2,375.2M539.9,435.2L540.1,414.6L540.2,391.6L536.1,366.7M604.9,447.8L605.6,443.1L603.0,437.0L603.2,431.4L607.0,423.0L608.8,418.0L612.0,414.7L614.1,413.2L616.3,406.7L616.1,403.3L619.4,401.4L619.7,399.5M604.9,447.8L588.4,447.7L567.2,449.3L548.3,449.7M659.2,397.2L683.0,395.0L707.3,392.9M659.2,397.2L660.9,401.6L660.0,432.3L659.6,470.1L663.1,505.7M938.1,193.7L936.7,190.3L933.4,188.4L930.5,182.8L923.6,184.9M894.7,174.4L894.9,191.1M894.9,191.1L907.9,188.3L923.6,184.9M381.1,351.4L380.3,363.1M270.0,339.5L251.7,471.6M251.9,217.5L248.2,240.2L282.8,245.9M369.9,255.6L373.7,208.7M377.4,161.0L373.7,208.7M63.6,71.7L66.9,72.3L71.6,73.8L74.8,77.0L78.9,79.6L80.6,84.7L79.9,88.6L80.2,92.1L83.6,94.0L87.5,95.0L94.2,94.4L98.0,94.6L103.4,97.1L105.5,99.0L109.0,99.1L113.1,98.2L120.2,100.4L126.7,99.4L130.2,98.3L134.0,100.3L140.3,99.4L173.0,106.9M501.8,143.7L501.8,139.5L500.8,136.0L499.5,132.2L498.7,127.4L498.6,122.1L498.0,120.8L497.4,114.0L497.4,110.9L497.1,108.1L496.4,103.4L494.5,98.6L492.7,94.3L492.5,90.1L492.4,85.6L492.9,82.7L493.1,80.0L491.6,76.6L491.4,74.3M380.0,139.7L411.0,141.9L444.4,143.6L470.8,144.5L501.8,143.7M731.9,390.0L721.8,391.4L707.3,392.9M755.3,387.1L753.5,389.3L751.1,394.2L756.7,397.4L760.2,398.3L764.8,405.2L767.6,409.0L775.1,413.6L776.8,416.3L781.9,419.4L785.0,424.6L791.8,428.4L794.0,433.5L795.6,435.9L795.2,437.7L799.2,439.7L801.8,443.8L802.5,448.2L804.4,448.8L807.9,449.4M731.9,390.0L755.3,387.1M729.8,484.9L728.5,482.3L726.9,479.5L727.0,475.6L727.0,471.4L725.5,467.1L725.7,459.6L728.5,455.1L726.3,451.1L722.6,444.1L715.4,421.4L707.3,392.9M850.6,279.8L852.4,277.3L849.7,275.3L848.5,276.7M868.1,253.6L852.7,256.9L837.8,259.8L825.4,262.3L819.8,263.4L803.5,266.3M836.1,269.8L834.1,267.1L831.3,264.2L825.6,263.4L822.5,265.8L820.9,267.9L815.6,267.9L813.7,270.8L810.3,272.3L807.8,275.6L805.5,278.1L803.5,266.3M270.0,339.5L282.8,245.9M381.1,351.4L398.8,352.7M403.2,281.8L403.2,281.0L404.7,258.2L369.9,255.6M381.1,351.4L359.0,349.6L327.7,346.6L298.7,343.3L270.0,339.5M369.9,255.6L352.4,254.0L317.5,250.3L300.1,248.2L282.8,245.9M669.2,236.0L669.2,236.1L687.7,234.4L703.9,232.4L704.1,234.2M711.0,294.5L709.2,278.3L706.6,255.4L704.1,234.2M657.3,238.4L657.2,238.4L659.6,265.6L662.0,292.8L660.6,299.5L662.2,301.1L663.5,305.1L663.6,308.3L662.3,309.8L661.3,313.8L658.0,319.3L656.0,325.8L655.8,330.6M591.1,200.7L591.4,202.0L593.8,205.6L592.3,207.5L592.7,212.4L593.5,214.5L594.7,218.1L600.4,220.1L602.3,223.6M591.1,200.7L568.9,201.2L544.3,202.1L521.3,202.7L502.9,202.7M514.1,271.4L529.9,271.3L545.7,271.1L566.0,270.3L585.2,269.1L588.7,272.7L591.2,274.6M602.3,223.6L603.4,225.3L605.5,226.4L606.5,228.9L609.3,230.6L611.2,232.5L610.6,238.9L607.7,244.4L606.7,246.2L602.8,247.8L596.9,249.2L595.6,253.4L597.8,255.1L598.7,258.7L596.7,262.9L595.7,266.5L591.4,270.3L591.2,274.6M514.1,271.4L513.0,267.2L513.4,263.0L513.1,258.9L511.3,252.1L510.1,249.3L508.8,248.5L508.7,243.1L507.6,239.2L504.5,234.7L504.6,232.8L503.5,228.9L502.7,226.5M502.7,226.5L502.8,224.4L500.0,221.7L501.4,217.9L502.3,214.1L502.7,211.6L500.6,208.4L500.6,202.7L502.9,202.7M878.8,294.6L879.8,292.7L883.9,291.4M850.6,279.8L850.4,278.4L848.5,276.7M739.2,350.7L766.7,347.7L775.9,345.8M836.1,269.8L835.0,274.6L824.8,270.0L824.5,276.4L822.8,279.1L819.9,282.8L817.8,286.3L816.3,285.6L814.9,289.2L813.7,292.4L813.2,294.7L810.8,296.0L807.9,294.9L805.2,293.5L804.3,298.8L802.0,303.5L801.7,307.1L798.7,310.7L797.0,315.2L797.7,317.8L797.7,320.0L795.1,322.3L792.5,322.4L790.5,324.5L788.3,324.0L788.3,326.1L781.8,329.1L779.4,327.8L774.1,331.5L771.0,330.1L768.6,328.3L767.2,324.4M775.9,345.8L807.1,341.8L843.6,335.4L862.9,331.3L882.4,327.1M848.5,276.7L844.7,274.8L840.7,274.1L841.5,271.4L838.8,270.1L836.1,269.8M850.6,279.8L850.6,281.7L848.0,284.5L847.0,290.1L849.7,290.9L852.4,289.3L854.0,292.3M894.7,174.4L890.8,155.4L888.4,155.8L887.9,155.0L888.2,151.5L885.2,145.9L885.7,140.7L884.0,137.5L881.9,130.8L881.9,127.7L881.1,123.0M908.5,171.4L894.7,174.4M539.9,435.2L531.6,430.7L526.1,428.2L521.7,429.9L515.0,429.7L511.0,429.7L507.7,431.6L504.4,432.6L501.6,431.4L495.2,432.6L492.3,428.7L489.2,432.1L484.0,430.5L478.6,426.7L472.8,429.0L470.4,423.2L461.5,423.6L455.8,422.2L449.4,420.3L446.7,415.3L441.6,416.7L438.6,414.6L434.1,411.9L435.1,389.4L436.1,366.3L417.4,365.4L398.8,364.4L380.3,363.1M548.3,449.7L550.1,474.9L553.4,477.4L554.5,481.0L556.4,486.4L558.8,491.7L560.6,494.9L558.9,503.5L557.7,506.1L556.1,511.7L557.6,513.2L557.7,517.9L554.7,521.1L552.7,524.6L554.5,527.6M539.9,435.2L541.0,436.7L544.7,436.3L549.2,436.3L548.3,449.7M380.3,363.1L375.7,424.7L372.4,468.9L354.2,467.4L318.8,464.1L301.1,462.2L301.1,464.2L302.9,468.2M380.0,139.7L377.4,161.0M260.6,159.3L261.0,158.5L262.8,146.7L295.0,151.4L320.4,154.9L350.0,158.1L377.4,161.0M380.0,139.7L381.6,111.4L385.0,69.0M729.8,484.9L689.3,489.3L678.0,491.7L677.8,493.5L682.9,498.8L682.3,503.5L681.1,506.8M800.4,481.6L796.1,481.8L791.9,480.7L789.7,481.8L790.8,489.9L788.5,492.3L786.5,488.5L753.7,489.5L733.6,490.8L729.8,484.9M711.0,294.5L717.2,294.3L720.6,296.2L726.0,300.9L730.0,302.1L733.0,303.6L737.2,302.4L740.5,303.3L744.2,301.5L747.6,300.7L749.4,303.7L753.1,305.5M739.2,350.7L726.8,353.0L710.4,353.9L705.1,354.8L694.4,355.3L683.6,356.2L673.6,357.1L662.1,358.7L661.4,357.7L657.7,358.1L658.1,361.8L631.5,363.6M638.1,352.6L637.7,355.0L638.3,358.7L635.5,360.8L631.5,363.6M753.1,305.5L753.8,307.7L754.3,312.5L756.9,315.9L758.3,319.3L761.4,322.0L763.6,324.5L767.2,324.4M655.8,330.6L656.1,332.4L654.3,335.8L656.0,337.9L652.9,339.9L649.0,342.2L650.1,347.3L647.8,349.4L643.2,347.6L638.2,346.7L637.1,349.1L638.1,352.6M711.0,294.5L710.1,295.7L712.1,300.4L711.5,302.2L708.5,302.6L705.9,305.0L701.6,304.6L701.7,309.2L699.4,311.2L697.4,315.5L695.0,316.5L691.7,323.9L687.8,322.3L686.4,319.5L683.7,324.5L682.0,327.3L677.8,324.9L673.8,327.6L672.6,330.0L666.7,326.9L663.0,329.9L658.2,328.4L658.2,331.0L655.8,330.6M739.2,350.7L744.3,348.6L747.9,346.7L749.2,344.2L753.9,340.7L755.5,338.0L755.7,336.0L761.0,332.5L767.2,324.4M522.6,285.2L526.8,288.3L529.1,288.2L529.7,291.6L527.2,296.0L528.6,298.2L530.8,303.2L535.6,305.3L535.8,330.6L536.0,355.9M536.0,355.9L519.8,356.1L486.5,356.0L453.2,355.2L434.7,354.6L416.2,353.7L398.8,352.7M522.6,285.2L498.1,285.1L457.3,284.4L434.2,283.5L403.2,281.8L403.2,281.8M398.8,352.7L401.1,318.1L403.2,281.8M874.3,250.5L870.3,250.1L869.0,251.5L868.1,253.6M874.3,250.5L872.3,253.5L873.7,257.8M868.1,253.6L875.7,282.7L887.5,280.1M179.0,324.7L201.1,208.8M179.0,324.7L175.5,343.3L174.6,344.0L172.7,347.3L170.3,345.9L167.1,343.5L163.3,342.8L161.4,345.4L162.5,348.9L161.5,353.8L160.9,358.4L161.0,363.1L158.9,367.4M100.7,186.2L150.6,198.1L150.6,198.1M146.6,421.1L149.2,421.6L152.2,417.4L149.5,413.6L149.5,410.0L149.3,405.7L154.1,401.2L157.6,390.9L164.3,387.2L161.6,382.1L160.0,377.3L159.3,372.9L158.9,369.6L158.9,367.4M100.7,186.2L30.7,166.3M100.7,186.2L83.0,254.7L108.6,293.9L134.1,331.7L158.9,367.4M173.0,106.9L174.0,102.9L173.4,99.1L180.0,67.4L186.4,38.5M251.9,217.5L201.1,208.8M251.9,217.5L261.1,159.8L260.6,159.3M173.0,106.9L175.8,112.1L178.0,114.6L178.1,118.2L175.9,120.8L172.4,126.3L168.5,133.1L164.0,136.9L160.5,141.5L159.6,145.2L162.3,147.4L163.0,150.7L160.1,156.9L150.6,198.1M260.6,159.3L259.0,157.7L257.9,154.2L256.3,153.3L253.2,157.5L249.3,157.6L240.3,154.6L239.5,156.8L234.2,155.0L230.6,157.7L228.8,151.1L227.4,147.4L224.2,146.3L223.5,144.4L223.6,138.2L221.3,134.8L220.8,127.2L219.5,123.6L217.7,122.6L215.4,125.5L211.7,127.7L209.3,124.8L210.3,118.9L212.4,117.8L212.2,111.7L215.0,105.9L217.7,101.2L213.0,100.0L209.6,95.9L206.6,88.0L204.7,83.9L201.6,81.0L199.4,76.8L200.3,72.7L197.5,65.8L201.4,41.8M201.1,208.8L150.6,198.1M936.2,155.3L934.5,156.0L932.9,153.0L928.9,150.5L929.0,148.1L915.8,107.4M908.5,171.4L928.5,166.4L929.6,163.7L932.7,161.3L934.8,161.2M908.5,171.4L906.6,169.4L907.1,166.1L906.0,160.0L906.1,158.5L905.3,152.9L906.0,147.9L906.8,145.6L907.4,139.7L906.8,136.0L906.7,133.6L909.6,131.7L912.5,128.1L912.4,125.1L910.4,122.2L910.6,115.6L910.6,115.5"/>
+            <a class="pin" href="#district" data-city="Boston, Massachusetts" aria-label="Show Boston, Massachusetts">
+              <circle class="pulse" cx="933.8" cy="173.7" r="12"/><circle class="pulse p2" cx="933.8" cy="173.7" r="12"/>
+              <circle class="dot" cx="933.8" cy="173.7" r="8"/>
+              <text class="pin-label" x="914" y="181" text-anchor="end">Boston</text>
+            </a>
           </g>
-          <g>
-            <rect class="wall" x="250" y="132" width="64" height="50" rx="3"/>
-            <path class="roof" d="M241 134 L282 100 L323 134 Z"/>
-            <rect class="window" style="--delay: 1.3s" x="262" y="146" width="14" height="14" rx="2"/>
-            <rect class="window" style="--delay: 2.1s" x="288" y="146" width="14" height="14" rx="2"/>
-          </g>
-          <g>
-            <rect class="wall" x="540" y="150" width="58" height="46" rx="3"/>
-            <path class="roof" d="M531 152 L569 120 L607 152 Z"/>
-            <rect class="window" style="--delay: .7s" x="561" y="164" width="16" height="14" rx="2"/>
-          </g>
-          <g>
-            <rect class="wall" x="690" y="140" width="52" height="42" rx="3"/>
-            <path class="roof" d="M682 142 L716 114 L750 142 Z"/>
-            <rect class="window" style="--delay: 2.8s" x="708" y="152" width="16" height="13" rx="2"/>
-          </g>
-          <!-- Trees sway from the base of the trunk -->
-          <g class="tree" style="--delay: 0s"><rect class="trunk" x="196" y="160" width="6" height="30" rx="2"/><circle class="leaf" cx="199" cy="150" r="20"/></g>
-          <g class="tree" style="--delay: -1.2s"><rect class="trunk" x="470" y="166" width="6" height="28" rx="2"/><circle class="leaf" cx="473" cy="156" r="18"/></g>
-          <g class="tree" style="--delay: -2.1s"><rect class="trunk" x="640" y="160" width="6" height="30" rx="2"/><circle class="leaf" cx="643" cy="150" r="16"/></g>
-          <path class="hill-front" d="M0 250 C200 205 420 215 560 235 C680 252 760 230 820 222 L820 300 L0 300 Z"/>
+          <!-- Families stand on a hill in front of the map -->
+          <path class="hill-front" d="M0 640 C220 590 430 596 600 612 C770 628 880 604 1000 596 L1000 720 L0 720 Z"/>
+          <g transform="translate(-95 300) scale(1.55)">
           <!-- Families holding hands: a wave passes along the row.
                Hand lines run deep into each body so they stay attached while people hop. -->
           <g>
@@ -304,10 +469,12 @@
             <g class="person" style="--i: 5"><circle class="skin" cx="502" cy="184" r="14"/><rect x="484" y="201" width="36" height="60" rx="16" fill="#e07a5f"/></g>
             <g class="person kid" style="--i: 6"><circle class="skin" cx="556" cy="222" r="11"/><rect x="543" y="236" width="26" height="34" rx="12" fill="#5a8fd1"/></g>
           </g>
+          </g>
         </svg>
+        <p class="where-now">📍 Now in <button type="button" class="link-btn" data-city="Boston, Massachusetts">Boston, MA · <span class="count-boston"></span> places</button>, with more cities on the way. <a href="familygo-contact.html">Want your city next?</a></p>
         <p class="lede"><span class="line">FamilyGo connects parents with the families, playdates, events and resources nearby —</span> <span class="line">so no one has to figure out parenting alone.</span></p>
         <div id="district">
-          <p class="ask serif">Help us find the right village for you and your family.</p>
+          <h2 class="ask">Allow us to help you find the right <em>village</em> for you and your family.</h2>
         <div class="card finder">
           <form id="finder-form">
             <div class="sentence">
@@ -334,23 +501,34 @@
               <span>year-old kid.</span>
               </span>
             </div>
-            <button class="btn primary" type="submit">Show me where my family can go!</button>
+            <button class="btn primary" type="submit">Show me where my family can go next!</button>
           </form>
           <p class="chips-label">What are you looking for?</p>
           <div class="chips" id="chips" role="group" aria-label="What are you looking for?">
             <button type="button" class="chip" data-tag="education" aria-pressed="false">🏫 Education</button>
-            <button type="button" class="chip" data-tag="activities" aria-pressed="false">🎨 Activities</button>
-            <button type="button" class="chip" data-tag="restaurants" aria-pressed="false">🍽️ Restaurants</button>
+            <button type="button" class="chip" data-tag="activities" aria-pressed="false">🎨 Activities &amp; events</button>
+            <button type="button" class="chip" data-tag="restaurants" aria-pressed="false">🍽️ Family-friendly restaurants</button>
             <button type="button" class="chip" data-tag="parks" aria-pressed="false">🛝 Parks &amp; playgrounds</button>
-            <button type="button" class="chip" data-tag="healthcare" aria-pressed="false">🩺 Healthcare</button>
-            <button type="button" class="chip" data-tag="childcare" aria-pressed="false">👶 Childcare</button>
             <button type="button" class="chip" data-tag="playdates" aria-pressed="false">🧸 Playdates</button>
-            <button type="button" class="chip" data-tag="events" aria-pressed="false">🎈 Family events</button>
             <button type="button" class="chip" data-tag="shopping" aria-pressed="false">🛍️ Shopping</button>
           </div>
           <div class="results" id="results" aria-live="polite">
-            <h3 class="serif">Your village in <b id="district-name"></b><span id="age-note"></span></h3>
+            <h3 class="serif">Your next fun adventure in <b id="district-name"></b><span id="age-note"></span></h3>
+            <div class="view-toggle" role="tablist" aria-label="View">
+              <button type="button" role="tab" aria-selected="true" data-view="places">🗂️ Places</button>
+              <button type="button" role="tab" aria-selected="false" data-view="calendar">📅 Calendar</button>
+            </div>
             <div class="options" id="options"></div>
+            <div class="calendar" id="calendar" hidden>
+              <div class="wk-head">
+                <button type="button" class="wk-today" id="wk-today">Today</button>
+                <button type="button" class="cal-nav" id="cal-prev" aria-label="Earlier weeks">‹</button>
+                <button type="button" class="cal-nav" id="cal-next" aria-label="Later weeks">›</button>
+                <h4 id="cal-title"></h4>
+                <div class="cal-legend" id="cal-legend"></div>
+              </div>
+              <div id="weeks"></div>
+            </div>
             <form class="where" id="where-form">
               <label class="where-q serif" for="where-input" id="where-q">Not in Boston? Tell us where you live.</label>
               <div class="where-row">
@@ -378,7 +556,7 @@
     </section>
 
     <section class="block" id="offers">
-      <div class="wrap">
+      <div class="wrap offers-wrap">
         <p class="label">What FamilyGo offers</p>
         <h2 class="serif">Everything a village gives you — in one place</h2>
         <div class="grid offers">
@@ -392,22 +570,23 @@
       </div>
     </section>
 
-    <section class="block" id="about">
-      <div class="wrap">
-        <p class="label">About FamilyGo</p>
-        <h2 class="serif">Why we're building the village</h2>
-        <div class="split">
-          <article class="card">
-            <p class="label">Our vision</p>
-            <p class="statement">To build the world's most welcoming parenting community.</p>
-            <p>We believe raising a child should never be a journey taken alone. By connecting families and sharing collective wisdom, we make parenting easier, more rewarding, and more connected.</p>
-          </article>
-          <article class="card">
-            <p class="label">Our mission</p>
-            <p class="statement">Connecting parents. Empowering families. Building communities.</p>
-            <p>FamilyGo combines human connection with AI-powered knowledge sharing to help parents navigate the challenges and joys of raising children.</p>
-            <p>Starting with Chinese-speaking families in North America, we aim to grow into a global community that welcomes parents and caregivers from every background.</p>
-          </article>
+    <section class="block about-banner-wrap" id="about">
+      <div class="wrap about-wrap">
+        <div class="about-banner">
+          <div class="about-photo">
+            <div class="about-head">
+              <p class="label">About FamilyGo</p>
+              <h2 class="serif">Why we're building the <em>village</em></h2>
+            </div>
+            <a class="photo-credit" href="https://www.rawpixel.com/image/11176548/image-cloud-plant-person" target="_blank" rel="noopener">Photo: St Mary's Park play area / rawpixel (CC0)</a>
+          </div>
+          <div class="about-panels">
+            <article class="glass">
+              <p class="label">Our Vision and Mission</p>
+              <p class="statement">A welcoming village for every parent.</p>
+              <p>No one should raise a child alone. FamilyGo connects families nearby and pairs real human connection with AI-powered shared wisdom — starting in Boston, and growing to welcome parents everywhere as you join the community.</p>
+            </article>
+          </div>
         </div>
       </div>
     </section>
@@ -416,8 +595,7 @@
       <div class="wrap">
         <p class="label">Our promise</p>
         <h2 class="serif promise">
-          <span>No parent should feel alone.</span>
-          <span>No experience should go to waste.</span>
+          <span class="one-line">No parent should feel alone. No experience should go to waste.</span>
           <span><em>Every family belongs.</em></span>
         </h2>
         <a class="btn primary" href="#district">Find my village</a>
@@ -432,6 +610,7 @@
     </div>
   </footer>
   <script src="data/boston.js"></script>
+  <script src="data/boston-events.js"></script>
   <script>
     document.getElementById('y').textContent = new Date().getFullYear();
     const OPTIONS = [
@@ -443,14 +622,9 @@
       { tag: 'restaurants', emoji: '🧁', title: 'Family cafés',             desc: 'Play corners and parent-friendly spots' },
       { tag: 'parks',       emoji: '🛝', title: 'Playgrounds',              desc: 'Rated by local parents' },
       { tag: 'parks',       emoji: '🌳', title: 'Parks & trails',           desc: 'Stroller-friendly walks nearby' },
-      { tag: 'healthcare',  emoji: '🩺', title: 'Pediatricians',            desc: 'Doctors other parents trust' },
-      { tag: 'healthcare',  emoji: '🦷', title: 'Dentists & specialists',   desc: 'Kid-friendly care, reviewed by parents' },
-      { tag: 'childcare',   emoji: '👶', title: 'Daycare',                  desc: 'Trusted childcare centers nearby' },
-      { tag: 'childcare',   emoji: '🧑‍🍼', title: 'Babysitters & nannies', desc: 'Recommended by families you know' },
       { tag: 'playdates',   emoji: '🧸', title: 'Playdates',                desc: 'Meetups at parks and libraries' },
       { tag: 'playdates',   emoji: '🏡', title: 'Local families',           desc: 'Parents nearby with kids the same age' },
-      { tag: 'events',      emoji: '🎈', title: 'Family events',            desc: 'Festivals, workshops and gatherings' },
-      { tag: 'events',      emoji: '📖', title: 'Story times',              desc: 'Libraries and bookstores near you' },
+      { tag: 'activities',  emoji: '🎈', title: 'Family events',            desc: 'Festivals, workshops and gatherings' },
       { tag: 'shopping',    emoji: '🛍️', title: 'FamilyGo Market',          desc: 'Clothes, toys and gear from neighbors' },
       { tag: 'shopping',    emoji: '🧺', title: "Kids' stores",             desc: 'Local shops parents recommend' },
     ];
@@ -458,8 +632,8 @@
     const optionsEl = document.getElementById('options');
     const resultsEl = document.getElementById('results');
 
-    const TAG_EMOJI = { education: '🏫', activities: '🎨', restaurants: '🍽️', parks: '🛝', healthcare: '🩺',
-                        childcare: '👶', playdates: '🧸', events: '🎈', shopping: '🛍️' };
+    const TAG_EMOJI = { education: '🏫', activities: '🎨', restaurants: '🍽️', parks: '🛝',
+                        playdates: '🧸', shopping: '🛍️' };
     const noteEl = document.getElementById('results-note');
 
     // Real listings exist for Boston, MA (data/boston.js); other places get the generic preview.
@@ -487,28 +661,9 @@
       parks: `<svg viewBox="0 0 48 36"><path d="M6 34L10 3M42 34L38 3M8 3h32" stroke="#8a6a4a" stroke-width="3" stroke-linecap="round"/>
         <g class="swing"><path d="M19 4v20M29 4v20" stroke="#777" stroke-width="1.5"/><rect x="17" y="23" width="14" height="3" rx="1.5" fill="#3f9b6a"/>
         <circle cx="24" cy="15" r="3.5" fill="#e9b98f"/><rect x="21" y="18" width="6" height="6" rx="2.5" fill="#f2b44b"/></g></svg>`,
-      healthcare: `<svg viewBox="0 0 48 36"><path class="heart" d="M24 31S8 21 8 12a7 7 0 0 1 16-3 7 7 0 0 1 16 3c0 9-16 19-16 19z" fill="#e0565b"/>
-        <polyline class="ecg" points="2,18 14,18 18,10 22,26 26,14 29,18 46,18" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>`,
-      childcare: `<svg viewBox="0 0 48 36"><g class="cradle">
-        <path d="M5 17h38a19 15 0 0 1-38 0z" fill="#e6a93a"/><path d="M5 17h38" stroke="#c98d22" stroke-width="2" stroke-linecap="round"/>
-        <circle cx="15" cy="14" r="6" fill="#f3c9a0"/><path d="M13 8.5q2-2.5 4 0" stroke="#7a4a2a" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-        <path d="M11.6 14.2q1.3 1.2 2.6 0M15.8 14.2q1.3 1.2 2.6 0" stroke="#5a3a1a" stroke-width="1" fill="none" stroke-linecap="round"/>
-        <circle cx="12.2" cy="16.4" r="1.1" fill="#f29b9b" opacity=".8"/><circle cx="17.8" cy="16.4" r="1.1" fill="#f29b9b" opacity=".8"/>
-        <path d="M19 13.5c4-2 13-2 21 0v4H19z" fill="#9bc4f0"/><path d="M22 15.5h3M28 15.5h3M34 15.5h3" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/></g>
-        <text class="zz z1" x="24" y="8">z</text><text class="zz z2" x="30" y="4">z</text></svg>`,
       playdates: `<svg viewBox="0 0 48 36"><path d="M17 24L31 24" stroke="#e9b98f" stroke-width="2.5" stroke-linecap="round"/>
         <g class="kid k1"><circle cx="14" cy="11" r="4.5" fill="#e9b98f"/><rect x="9" y="16" width="10" height="14" rx="5" fill="#8a6fd1"/></g>
         <g class="kid k2"><circle cx="34" cy="11" r="4.5" fill="#e9b98f"/><rect x="29" y="16" width="10" height="14" rx="5" fill="#6bb38a"/></g></svg>`,
-      events: `<svg viewBox="0 0 48 36">
-        <g class="popper"><path d="M4 34L10 16L22 28Z" fill="#f2b44b"/><path d="M6.5 27l7.5 5M8.5 21.5l10 8" stroke="#e0565b" stroke-width="2"/>
-          <ellipse cx="16" cy="22" rx="8.5" ry="2.6" transform="rotate(45 16 22)" fill="#d98f1f"/></g>
-        <g class="burst"><path class="pc p1" d="M18 18l-2-7" stroke="#5b8def" stroke-width="2" stroke-linecap="round"/>
-          <path class="pc p2" d="M21 20q3-6 8-6" stroke="#d14f8a" stroke-width="2" fill="none" stroke-linecap="round"/>
-          <path class="pc p3" d="M22 23l7 1" stroke="#6bb38a" stroke-width="2" stroke-linecap="round"/>
-          <circle class="pc p4" cx="14" cy="9" r="1.6" fill="#f2b44b"/><rect class="pc p5" x="25" y="9" width="3" height="3" rx=".6" fill="#8a6fd1" transform="rotate(20 26.5 10.5)"/>
-          <circle class="pc p6" cx="30" cy="20" r="1.5" fill="#e0565b"/></g>
-        <g class="balloon"><path d="M40 22q-2 6 1 13" stroke="#999" fill="none"/><ellipse cx="40" cy="12" rx="6.5" ry="8.5" fill="#d14f8a"/>
-          <path d="M38.5 20.5h3l-1.5 2z" fill="#d14f8a"/><ellipse cx="37.8" cy="8.5" rx="1.6" ry="2.6" fill="#fff6"/></g></svg>`,
       shopping: `<svg viewBox="0 0 48 36"><g class="bag">
         <path d="M12 14v-2a8 6 0 0 1 16 0v2" stroke="#4b5fc2" stroke-width="2.5" fill="none"/>
         <g class="teddy"><circle cx="15" cy="3" r="2.6" fill="#a8743f"/><circle cx="25" cy="3" r="2.6" fill="#a8743f"/>
@@ -548,6 +703,7 @@
       const groups = new Map();
       items.forEach(it => groups.has(it.tag) ? groups.get(it.tag).push(it) : groups.set(it.tag, [it]));
       return [...groups].map(([tag, list]) => {
+        list.sort((a, b) => !a.img - !b.img); // places with a photo come first
         const row = document.createElement('section');
         row.className = 'rail-row';
         row.innerHTML = '<h4><span class="anim" aria-hidden="true"></span> <em></em> <small></small></h4><div class="rail"></div>';
@@ -561,7 +717,7 @@
 
     const agesLabel = p => p.ageMin === 0 && p.ageMax === 17 ? 'All ages' : p.ageMin === p.ageMax ? `Age ${p.ageMin}` : `Ages ${p.ageMin}–${p.ageMax}`;
 
-    function renderOptions() {
+    function renderPlaces() {
       const picked = chips.filter(c => c.getAttribute('aria-pressed') === 'true').map(c => c.dataset.tag);
       const place = document.getElementById('district-input').value.trim();
       creditsEl.hidden = true;
@@ -594,6 +750,302 @@
       optionsEl.replaceChildren(...rows(list.map(o => ({ tag: o.tag, title: o.title, sub: o.desc }))));
     }
 
+    // ---------- Calendar of dated events (Boston only for now) ----------
+    const TAG_COLOR = { education: '#5b8def', activities: '#f08a4b', restaurants: '#e0565b', parks: '#3f9b6a', playdates: '#8a6fd1', shopping: '#4b5fc2' };
+    const calEl = document.getElementById('calendar');
+    const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const pad2 = n => String(n).padStart(2, '0');
+    const isoDate = d => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+    const todayIso = isoDate(new Date());
+    const tomorrowIso = isoDate(new Date(Date.now() + 864e5));
+    let view = 'places';
+
+    function fmtTime(t) {
+      if (!t) return 'All day';
+      const [h, m] = t.split(':').map(Number);
+      return `${(h % 12) || 12}${m ? ':' + pad2(m) : ''} ${h < 12 ? 'am' : 'pm'}`;
+    }
+    function filteredEvents() {
+      const all = window.FAMILYGO_EVENTS?.boston;
+      if (!all || !isBoston(input.value.trim())) return null;
+      const picked = chips.filter(c => c.getAttribute('aria-pressed') === 'true').map(c => c.dataset.tag);
+      const age = ageSel.value === '' ? null : Number(ageSel.value);
+      return all.filter(e => (!picked.length || picked.includes(e.tag)) && (age === null || (e.ageMin <= age && age <= e.ageMax)))
+                .sort((a, b) => (a.date + (a.start || '')).localeCompare(b.date + (b.start || '')));
+    }
+
+    // Build a small .ics file so people can add an event to their own calendar
+    function downloadIcs(e) {
+      const d = e.date.replaceAll('-', '');
+      const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
+      const esc = t => String(t || '').replace(/[\\,;]/g, m => '\\' + m).replace(/\n/g, '\\n');
+      let when;
+      if (e.start) {
+        const end = e.end || `${pad2(Math.min(23, Number(e.start.slice(0, 2)) + 1))}:${e.start.slice(3)}`;
+        when = [`DTSTART:${d}T${e.start.replace(':', '')}00`, `DTEND:${d}T${end.replace(':', '')}00`];
+      } else {
+        const next = new Date(e.date + 'T12:00:00'); next.setDate(next.getDate() + 1);
+        when = [`DTSTART;VALUE=DATE:${d}`, `DTEND;VALUE=DATE:${isoDate(next).replaceAll('-', '')}`];
+      }
+      const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//FamilyGo//EN', 'BEGIN:VEVENT',
+        `UID:${d}-${Math.random().toString(36).slice(2)}@familygo`, `DTSTAMP:${stamp}`, ...when,
+        `SUMMARY:${esc(e.title)}`, `LOCATION:${esc(e.venue)}`, `DESCRIPTION:${esc((e.note ? e.note + ' — ' : '') + e.url)}`, `URL:${e.url}`,
+        'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
+      a.download = e.title.replace(/[^\w]+/g, '-').slice(0, 40) + '.ics';
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    }
+
+    // One full event card (used under the week grid and in the phone list)
+    function eventCard(e, showDate = true) {
+      const li = document.createElement('li');
+      li.className = 'event';
+      li.style.setProperty('--c', TAG_COLOR[e.tag]);
+      li.innerHTML = '<span class="time"></span><div><a class="title" target="_blank" rel="noopener"></a><span class="ev-where"></span><span class="ev-note"></span>' +
+                     '<div class="actions"><a class="more" target="_blank" rel="noopener">Official page ↗</a><button type="button" class="add">＋ Add to my calendar</button></div></div>';
+      const time = li.querySelector('.time');
+      const day = new Date(e.date + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+      time.innerHTML = '<span class="to"></span><span></span>' + (e.start && e.end ? '<span class="to"></span>' : '');
+      time.children[0].textContent = day;
+      time.children[1].textContent = e.start ? fmtTime(e.start) : 'All day';
+      if (e.start && e.end) time.children[2].textContent = 'to ' + fmtTime(e.end);
+      if (!showDate) time.children[0].remove();
+      const t = li.querySelector('a.title'); t.textContent = e.title; t.href = e.url;
+      if (isFree(e)) { li.classList.add('free'); t.insertAdjacentHTML('afterend', '<span class="free-pill"><img class="crown-img" src="images/crown.png" alt="" aria-hidden="true">Free event!</span>'); }
+      li.querySelector('a.more').href = e.url;
+      li.querySelector('.ev-where').textContent = `${e.venue} · ${agesLabel(e)}`;
+      const note = li.querySelector('.ev-note'); e.note ? note.textContent = e.note : note.remove();
+      li.querySelector('.add').addEventListener('click', () => downloadIcs(e));
+      return li;
+    }
+
+    // Free = the official page says so ("Free", "Free; …", "Free admission …", or a title starting with Free)
+    const isFree = e => /^Free(\s*;|\s*$|\s+admission)/i.test(e.note || '') || /^Free\b/.test(e.title);
+    const HOUR_PX = 46;
+    const DOW = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
+    const mondayOf = d => addDays(d, -((d.getDay() + 6) % 7));
+    const shortDate = d => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const toHours = t => { const [h, m] = t.split(':').map(Number); return h + m / 60; };
+    const evKey = e => e.date + e.start + e.title;
+    const phone = window.matchMedia('(max-width: 720px)');
+    let anchorWeek = null, openWeek = null, pickedEvent = null;
+
+    function isoWeek(d) {
+      const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+      t.setUTCDate(t.getUTCDate() + 4 - (t.getUTCDay() || 7));
+      return Math.ceil(((t - Date.UTC(t.getUTCFullYear(), 0, 1)) / 864e5 + 1) / 7);
+    }
+
+    // Time grid for one week: day headers, an all-day row, and blocks placed by start/end time
+    function weekGrid(ws, evs, detail) {
+      const grid = document.createElement('div');
+      grid.className = 'tg';
+      const days = DOW.map((_, i) => addDays(ws, i));
+      const timed = evs.filter(e => e.start), allDay = evs.filter(e => !e.start);
+      const startH = Math.min(9, ...timed.map(e => Math.floor(toHours(e.start))));
+      const endH = Math.max(17, ...timed.map(e => Math.ceil(toHours(e.end || e.start) + (e.end ? 0 : 1))));
+      grid.style.setProperty('--hour', HOUR_PX + 'px');
+
+      // side-by-side lanes for events that overlap in time
+      const layout = {};
+      days.forEach(d => {
+        const iso = isoDate(d);
+        const dayEvs = timed.filter(e => e.date === iso).map(e => ({ e, s: toHours(e.start), f: e.end ? toHours(e.end) : toHours(e.start) + 1 }))
+                            .sort((x, y) => x.s - y.s);
+        let group = [], groupEnd = -1, lanes = [];
+        const closeGroup = () => { group.forEach(x => x.lanes = lanes.length); group = []; lanes = []; };
+        dayEvs.forEach(x => {
+          if (x.s >= groupEnd) closeGroup();
+          let i = lanes.findIndex(end => end <= x.s);
+          if (i < 0) { i = lanes.length; lanes.push(0); }
+          lanes[i] = x.f; x.lane = i; group.push(x); groupEnd = Math.max(groupEnd, x.f);
+        });
+        closeGroup();
+        const busy = dayEvs.length || allDay.some(e => e.date === iso);
+        layout[iso] = { dayEvs, busy, maxLanes: Math.max(1, ...dayEvs.map(x => x.lanes)) };
+      });
+      grid.style.gridTemplateColumns = '52px ' + days.map(d => {
+        const L = layout[isoDate(d)];
+        return L.busy ? `minmax(0, ${1 + (L.maxLanes - 1) * 0.9}fr)` : 'minmax(46px, .28fr)';
+      }).join(' ');
+
+      grid.append(document.createElement('span'));
+      days.forEach(d => {
+        const iso = isoDate(d), h = document.createElement('div');
+        h.className = 'tg-dayhead' + (iso === todayIso ? ' today' : iso < todayIso ? ' past' : '') + (iso === tomorrowIso ? ' tomorrow' : '') + (layout[iso].busy ? '' : ' empty');
+        h.innerHTML = '<span></span><b></b>';
+        h.firstChild.textContent = DOW[(d.getDay() + 6) % 7];
+        h.lastChild.textContent = d.getDate();
+        if (iso === tomorrowIso) { h.title = 'Tomorrow'; if (layout[iso].busy) h.firstChild.textContent += ' · Tomorrow'; }
+        grid.append(h);
+      });
+
+      const block = e => {
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'blk';
+        b.style.setProperty('--c', TAG_COLOR[e.tag]);
+        b.setAttribute('aria-pressed', String(pickedEvent === evKey(e)));
+        b.innerHTML = '<b></b><small></small>';
+        b.title = `${isFree(e) ? 'Free event! · ' : ''}${e.title} — ${e.start ? fmtTime(e.start) : 'All day'}, ${e.venue}`;
+        b.querySelector('b').textContent = e.title;
+        b.querySelector('small').textContent = (isFree(e) ? 'Free event! · ' : '') + (e.start ? fmtTime(e.start) + ' · ' + e.venue : e.venue);
+        if (isFree(e)) { b.classList.add('free'); b.insertAdjacentHTML('afterbegin', '<img class="crown" src="images/crown.png" alt="" aria-hidden="true">'); }
+        b.addEventListener('click', () => {
+          pickedEvent = pickedEvent === evKey(e) ? null : evKey(e);
+          grid.querySelectorAll('.blk').forEach(x => x.setAttribute('aria-pressed', 'false'));
+          b.setAttribute('aria-pressed', String(!!pickedEvent));
+          detail.replaceChildren(...(pickedEvent ? [eventCard(e)] : []));
+        });
+        return b;
+      };
+
+      if (allDay.length) {
+        const label = document.createElement('span'); label.className = 'tg-label'; label.textContent = 'All day'; label.style.paddingTop = '8px';
+        grid.append(label);
+        days.forEach(d => {
+          const cell = document.createElement('div'); cell.className = 'tg-allday';
+          cell.append(...allDay.filter(e => e.date === isoDate(d)).map(block));
+          grid.append(cell);
+        });
+      }
+
+      const hours = document.createElement('div');
+      hours.className = 'tg-hours';
+      hours.style.height = (endH - startH) * HOUR_PX + 'px';
+      for (let h = startH + 1; h < endH; h++) {
+        const s = document.createElement('span');
+        s.style.top = (h - startH) * HOUR_PX + 'px';
+        s.textContent = fmtTime(pad2(h) + ':00');
+        hours.append(s);
+      }
+      grid.append(hours);
+
+      days.forEach(d => {
+        const iso = isoDate(d), col = document.createElement('div');
+        col.className = 'tg-col' + (iso === todayIso ? ' today' : '');
+        col.style.height = (endH - startH) * HOUR_PX + 'px';
+        if (!layout[iso].busy) col.classList.add('empty');
+        layout[iso].dayEvs.forEach(x => {
+          const b = block(x.e);
+          b.style.top = (x.s - startH) * HOUR_PX + 1 + 'px';
+          b.style.height = Math.max((x.f - x.s) * HOUR_PX - 2, 30) + 'px';
+          b.style.setProperty('--lane', x.lane);
+          b.style.setProperty('--w', 100 / x.lanes + '%');
+          if (x.lanes > 3) b.classList.add('narrow');
+          col.append(b);
+        });
+        grid.append(col);
+      });
+      return grid;
+    }
+
+    // Phone layout: the week as a list of days
+    function weekList(ws, evs) {
+      const wrap = document.createElement('div');
+      wrap.className = 'wk-list';
+      DOW.forEach((_, i) => {
+        const d = addDays(ws, i), iso = isoDate(d), dayEvs = evs.filter(e => e.date === iso);
+        if (!dayEvs.length) return;
+        const sec = document.createElement('div');
+        sec.innerHTML = '<h5></h5><ul></ul>';
+        sec.querySelector('h5').textContent = d.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+        if (iso === todayIso) sec.querySelector('h5').classList.add('today');
+        sec.querySelector('ul').append(...dayEvs.map(e => eventCard(e, false)));
+        wrap.append(sec);
+      });
+      return wrap;
+    }
+
+    function renderCalendar() {
+      const events = filteredEvents();
+      const weeksEl = document.getElementById('weeks');
+      const legend = document.getElementById('cal-legend');
+      if (!events) {
+        document.getElementById('cal-title').textContent = 'Coming soon';
+        weeksEl.innerHTML = '<p class="wk-empty">The events calendar is available for Boston for now. More cities are on the way.</p>';
+        legend.replaceChildren();
+        return;
+      }
+      if (!anchorWeek) { anchorWeek = mondayOf(new Date()); openWeek = isoDate(anchorWeek); }
+      document.getElementById('cal-prev').disabled = anchorWeek <= mondayOf(new Date());
+      const shown = openWeek ? new Date(openWeek + 'T12:00:00') : anchorWeek, ae = addDays(shown, 6);
+      document.getElementById('cal-title').textContent =
+        `${shortDate(shown)} – ${shortDate(ae)}, ${ae.getFullYear()} (Week ${isoWeek(shown)})`;
+
+      const thisWeek = isoDate(mondayOf(new Date()));
+      const sections = [];
+      for (let k = 0; k <= 2; k++) {
+        const ws = addDays(anchorWeek, 7 * k), we = addDays(ws, 6), key = isoDate(ws);
+        const evs = events.filter(e => e.date >= key && e.date <= isoDate(we));
+        const open = openWeek === key;
+        const sec = document.createElement('section');
+        sec.className = 'wk' + (key === thisWeek ? ' current' : '');
+        sec.innerHTML = '<button type="button" class="wk-bar"><span class="chev" aria-hidden="true">▸</span><span class="range"></span><span class="count"></span></button><div class="wk-body"></div>';
+        const bar = sec.querySelector('.wk-bar'), body = sec.querySelector('.wk-body');
+        bar.setAttribute('aria-expanded', String(open));
+        if (isoDate(we) < todayIso) bar.classList.add('past');
+        bar.querySelector('.range').textContent = `${shortDate(ws)} – ${shortDate(we)}`;
+        if (key === thisWeek) bar.querySelector('.range').insertAdjacentHTML('afterend', '<span class="wk-badge">This week</span>');
+        const count = bar.querySelector('.count');
+        const tags = [...new Set(evs.map(e => e.tag))];
+        count.append(...tags.map(t => { const d = document.createElement('i'); d.className = 'dot'; d.style.background = TAG_COLOR[t]; return d; }));
+        count.append(` ${evs.length} event${evs.length === 1 ? '' : 's'}`);
+        const nFree = evs.filter(isFree).length;
+        if (nFree) count.insertAdjacentHTML('beforeend', `<span class="free-count"><img class="crown-img" src="images/crown.png" alt="" aria-hidden="true">${nFree} free event${nFree === 1 ? '' : 's'}!</span>`);
+        body.hidden = !open;
+        if (open) {
+          if (!evs.length) body.innerHTML = '<p class="wk-empty">No events this week for your filters.</p>';
+          else if (phone.matches) body.append(weekList(ws, evs));
+          else {
+            const detail = document.createElement('ul'); detail.className = 'wk-detail';
+            body.append(weekGrid(ws, evs, detail), detail);
+            const picked = evs.find(e => evKey(e) === pickedEvent);
+            if (picked) detail.append(eventCard(picked));
+          }
+        }
+        bar.addEventListener('click', () => { openWeek = open ? null : key; pickedEvent = null; renderCalendar(); });
+        sections.push(sec);
+      }
+      weeksEl.replaceChildren(...sections);
+
+      const used = [...new Set(events.map(e => e.tag))];
+      legend.replaceChildren(...used.map(t => {
+        const s = document.createElement('span');
+        s.innerHTML = '<i class="dot"></i>';
+        s.querySelector('.dot').style.background = TAG_COLOR[t];
+        s.append(TAG_LABEL[t]);
+        return s;
+      }));
+    }
+
+    const shiftWeeks = n => {
+      const earliest = mondayOf(new Date());
+      anchorWeek = addDays(anchorWeek, 7 * n);
+      if (anchorWeek < earliest) anchorWeek = earliest;
+      openWeek = isoDate(anchorWeek); pickedEvent = null; renderCalendar();
+    };
+    document.getElementById('cal-prev').addEventListener('click', () => shiftWeeks(-1));
+    document.getElementById('cal-next').addEventListener('click', () => shiftWeeks(1));
+    document.getElementById('wk-today').addEventListener('click', () => { anchorWeek = null; pickedEvent = null; renderCalendar(); });
+    phone.addEventListener('change', () => { if (view === 'calendar') renderCalendar(); });
+
+    function setView(v) {
+      view = v;
+      document.querySelectorAll('.view-toggle [data-view]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.view === v)));
+      optionsEl.hidden = v !== 'places';
+      calEl.hidden = v !== 'calendar';
+      if (v === 'calendar') { creditsEl.hidden = true; renderCalendar(); } else renderPlaces();
+    }
+    document.querySelectorAll('.view-toggle [data-view]').forEach(b => b.addEventListener('click', () => setView(b.dataset.view)));
+
+    function renderOptions() {
+      renderPlaces();
+      if (view === 'calendar') { creditsEl.hidden = true; renderCalendar(); }
+    }
+
     chips.forEach(chip => chip.addEventListener('click', () => {
       chip.setAttribute('aria-pressed', chip.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
       renderOptions();
@@ -605,7 +1057,7 @@
       const v = ageSel.value;
       document.getElementById('age-field').classList.toggle('on', v !== '');
       document.getElementById('age-note').textContent =
-        v === '' ? '' : v === '0' ? ' for your baby' : ` for your ${v}-year-old`;
+        v === '' ? '' : v === '0' ? ' with your baby' : ` with your ${v}-year-old`;
     }
     ageSel.addEventListener('change', () => { renderAge(); if (resultsEl.classList.contains('on')) renderOptions(); });
 
@@ -701,13 +1153,24 @@
       const value = document.getElementById('district-input').value.trim();
       if (!value) return;
       document.getElementById('district-name').textContent = value;
+      anchorWeek = null; pickedEvent = null;
       document.getElementById('where-q').textContent = isBoston(value)
         ? 'Not in Boston? Tell us where you live.'
         : 'Looking somewhere else? Tell us where you live.';
       mainAC.close();
       renderAge();
-      renderOptions();
+      // The main button (or Enter) jumps to the week of the next upcoming event; other searches just refresh
+      const jumpToNext = !!e.submitter && window.FAMILYGO_EVENTS?.boston && isBoston(value);
+      if (jumpToNext) {
+        const next = (filteredEvents() || []).find(ev => ev.date > todayIso || (ev.date === todayIso && (!ev.start || ev.start >= new Date().toTimeString().slice(0, 5))));
+        const target = mondayOf(next ? new Date(next.date + 'T12:00:00') : new Date());
+        anchorWeek = mondayOf(new Date());
+        if (target > addDays(anchorWeek, 14)) anchorWeek = target; // keep it within the three weeks shown
+        openWeek = isoDate(target);
+        if (view !== 'calendar') setView('calendar'); else renderOptions();
+      } else renderOptions();
       resultsEl.classList.add('on');
+      if (jumpToNext) document.getElementById('calendar').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
     // The second box under the results searches again from the top
@@ -722,10 +1185,31 @@
       document.getElementById('district').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
+    // Map pins and the city list jump to that city's results
+    document.querySelector('.count-boston').textContent = window.FAMILYGO_PLACES?.boston?.length ?? '';
+    document.querySelectorAll('.hero [data-city]').forEach(el => el.addEventListener('click', e => {
+      e.preventDefault();
+      input.value = el.dataset.city;
+      document.getElementById('finder-form').requestSubmit();
+      document.getElementById('district').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }));
+
     // Start with Boston and a 3-year-old so real listings are visible right away
     input.value = 'Boston, Massachusetts';
     ageSel.value = '3';
     document.getElementById('finder-form').requestSubmit();
+
+    // Top bar "Find places" / "Events calendar" switch the results view, then scroll to it
+    function openView(v) {
+      if (view !== v) setView(v);
+      document.getElementById(v === 'calendar' ? 'calendar' : 'district').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    document.querySelectorAll('[data-view-link]').forEach(a => a.addEventListener('click', e => {
+      e.preventDefault();
+      openView(a.dataset.viewLink);
+      history.replaceState(null, '', a.getAttribute('href'));
+    }));
+    if (location.hash === '#calendar') setTimeout(() => openView('calendar'), 0);
   </script>
 </body>
 </html>
